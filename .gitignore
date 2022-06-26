@@ -1,0 +1,23 @@
+# Build artifacts
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Test files
+.nox/
+
+# Coverage files
+.coverage
+coverage.xml
+nosetests.xml
+
+# IDE files
+.idea
+.vscode
+.iml
+venv
+.venv
+__pycache__
+
+
