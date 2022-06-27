@@ -59,7 +59,7 @@ logging.basicConfig(level=logging.DEBUG)
 # 1. Set environment variables: os.environ['access_token'] = 'your token'
 # 2. pass to HyperionApiClient instance
 access_token = 'your access token goes here'
-client = HyperionApiClient(access_token=access_token)
+hyperion_client = HyperionApiClient(access_token=access_token)
 
 # well completion based on input filters of type ApiPayload; 
 # fetch_all = True will paginate all of rows and return accumulation of each page result
@@ -67,11 +67,22 @@ client = HyperionApiClient(access_token=access_token)
 payload = ApiPayload(start_date='2022-06-1', end_date='2022-06-25', state_code='TX')
 payload.fetch_all = False
 
-completions = client.well_completion(payload)
+completions = hyperion_client.well_completion(payload)
 print(completions)
 
 # output 
 # {'data': [{....}, {....}....], 'pagination': {'page_size': 500, 'start': 0, 'total_count': 250}}
+
+## Well data
+result_list = hyperion_client.wells(payload)
+
+## Product by Country and Operator
+result_list = hyperion_client.production_by_county_and_operator(payload)
+
+
+## Available api methods on hyperion_client
+dir(hyperion_client)
+# output: ['ducs_by_operator', 'fetch_regions', 'frac_crews', 'production_by_county_and_operator', 'production_by_well', 'rigs', 'well_completion', 'wells']
 
 ```
 
