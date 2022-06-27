@@ -15,7 +15,7 @@ nosetests.xml
 # IDE files
 .idea
 .vscode
-.iml
+synmax-api-python-client.iml
 venv
 .venv
 __pycache__

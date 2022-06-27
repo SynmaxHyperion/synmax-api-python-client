@@ -78,5 +78,7 @@ python setup.py bdist_wheel
 twine upload dist/*
 
 
+python setup.py clean --all
+
 
 ```
