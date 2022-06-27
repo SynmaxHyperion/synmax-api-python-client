@@ -1,16 +1,13 @@
 import json
-import os
 import logging
+import os
 from dataclasses import dataclass
 
 from synmax.common import ApiClient, PayloadModelBase
 
 LOGGER = logging.getLogger(__name__)
 
-_API_BASE = 'https://hyperion-api-xzzxclvs3q-uc.a.run.app'
-
-
-# _API_BASE = 'https://fracmodel.synmax.com'
+_API_BASE = 'https://hyperion.api.synmax.com/'
 
 
 @dataclass
