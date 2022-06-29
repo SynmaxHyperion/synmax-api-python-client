@@ -3,6 +3,8 @@ import logging
 import os
 from dataclasses import dataclass
 
+import pandas
+
 from synmax.common import ApiClient, PayloadModelBase
 
 LOGGER = logging.getLogger(__name__)
@@ -31,26 +33,26 @@ class HyperionApiClient(object):
         self.access_key = access_token
         self.api_client = ApiClient(access_token=access_token)
 
-    def fetch_regions(self):
+    def fetch_regions(self) -> pandas.DataFrame:
         return self.api_client.get(f"{_API_BASE}/regions", return_json=True)
 
-    def well_completion(self, payload: ApiPayload):
+    def well_completion(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{_API_BASE}/completions", payload=payload, return_json=True)
 
-    def ducs_by_operator(self, payload: ApiPayload):
+    def ducs_by_operator(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{_API_BASE}/ducsbyoperator", payload=payload, return_json=True)
 
-    def frac_crews(self, payload: ApiPayload):
+    def frac_crews(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{_API_BASE}/fraccrews", payload=payload, return_json=True)
 
-    def production_by_county_and_operator(self, payload: ApiPayload):
+    def production_by_county_and_operator(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{_API_BASE}/productionbycountyandoperator", payload=payload, return_json=True)
 
-    def production_by_well(self, payload: ApiPayload):
+    def production_by_well(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{_API_BASE}/productionbywell", payload=payload, return_json=True)
 
-    def rigs(self, payload: ApiPayload):
+    def rigs(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{_API_BASE}/rigs", payload=payload, return_json=True)
 
-    def wells(self, payload: ApiPayload):
+    def wells(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{_API_BASE}/wells", payload=payload, return_json=True)

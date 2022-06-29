@@ -1,7 +1,9 @@
 import logging
 from typing import List, Dict
 
+import pandas
 import requests
+from tqdm import tqdm
 
 from synmax.common.model import PayloadModelBase
 
@@ -40,7 +42,7 @@ class ApiClient:
 
         return response
 
-    def get(self, url, params=None, return_json=False, **kwargs) -> Dict:
+    def get(self, url, params=None, return_json=False, **kwargs) -> pandas.DataFrame:
         r"""Sends a GET request.
 
 
@@ -52,11 +54,13 @@ class ApiClient:
         :return: :class:`Response <Response>` object
         :rtype: requests.Response
         """
-        LOGGER.debug(url)
+        LOGGER.info(url)
         response = self.session.get(url, params=params, **kwargs)
-        return self._return_response(response, return_json)
+        json_result = self._return_response(response, return_json)
+        df = pandas.DataFrame(json_result['data'])
+        return df
 
-    def post(self, url, payload: PayloadModelBase = None, return_json=False, **kwargs) -> Dict:
+    def post(self, url, payload: PayloadModelBase = None, return_json=False, **kwargs) -> pandas.DataFrame:
         r"""Sends a POST request.
 
         :param url: URL for the new :class:`Request` object.
@@ -68,20 +72,30 @@ class ApiClient:
         :rtype: requests.Response
         """
 
+        LOGGER.info('Payload data: %s', payload)
+
         data_list: List[Dict] = []
 
-        while True:
-            LOGGER.debug('Payload data: %s', payload)
-            LOGGER.debug('Calling api: %s', url)
-            response = self.session.post(url, data=payload.payload(), **kwargs)
-            json_result = self._return_response(response, return_json)
-            pagination = json_result['pagination']
-            data_list.extend(json_result['data'])
-            if not payload.fetch_all or pagination['total_count'] <= pagination['start'] + pagination['page_size']:
-                break
+        total_count = 1
+        with tqdm(desc=F"Querying API {url} pages", total=total_count, dynamic_ncols=True, miniters=0) as progress_bar:
+            while True:
+                progress_bar.refresh()
+                response = self.session.post(url, data=payload.payload(), **kwargs)
+                json_result = self._return_response(response, return_json)
+                pagination = json_result['pagination']
+                data_list.extend(json_result['data'])
+                progress_bar.update()
 
-            payload.pagination_start = pagination['start'] + pagination['page_size']
+                if not payload.fetch_all or pagination['total_count'] <= pagination['start'] + pagination['page_size']:
+                    break
 
-        LOGGER.debug('Total response data: %s', len(data_list))
+                payload.pagination_start = pagination['start'] + pagination['page_size']
+                if total_count == 1:
+                    total_count = pagination['total_count'] // pagination['page_size']
+                    total_count = total_count + 1 if pagination['total_count'] % pagination['page_size'] > 0 else 0
+                    progress_bar.reset(total_count)
+                    progress_bar.update(1)
 
-        return {'data': data_list, 'pagination': pagination}
+        LOGGER.info('Total response data: %s', len(data_list))
+        df = pandas.DataFrame(data_list)
+        return df

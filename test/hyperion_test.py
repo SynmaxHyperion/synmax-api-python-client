@@ -2,7 +2,7 @@ import logging
 
 from synmax.hyperion import HyperionApiClient, ApiPayload
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 client = HyperionApiClient()
 
@@ -13,11 +13,10 @@ def fetch_region():
 
 
 def well_completion():
-    payload = ApiPayload(start_date='2022-06-1', end_date='2022-06-25', state_code='TX')
-    payload.fetch_all = False
+    payload = ApiPayload(start_date='2021-01-1', end_date='2022-06-25', state_code='TX')
 
-    completions = client.wells(payload)
-    print(completions)
+    result_df = client.wells(payload)
+    print(result_df.count())
 
 
 def main():

@@ -36,14 +36,15 @@ hyperion_client = HyperionApiClient(access_token=access_token)
 #### Fetching data based on your subscription key (access_key)
 
 ```python
+from synmax.hyperion import HyperionApiClient, ApiPayload
 
+hyperion_client = HyperionApiClient(access_token='....')
 # fetch regions
-regions = hyperion_client.fetch_regions()
-print(regions)
+region_df = hyperion_client.fetch_regions()
+print(region_df.count())
 
 
 ```
-
 
 #### Paginated data
 
@@ -62,30 +63,29 @@ access_token = 'your access token goes here'
 hyperion_client = HyperionApiClient(access_token=access_token)
 
 # well completion based on input filters of type ApiPayload; 
-# fetch_all = True will paginate all of rows and return accumulation of each page result
+# fetch_all = True will paginate all of rows and return accumulation of each page result. True by default
 # set fetch_all=False to get first page or any single page starting row with payload.pagination_start = <start row index, default to 0>
 payload = ApiPayload(start_date='2022-06-1', end_date='2022-06-25', state_code='TX')
 payload.fetch_all = False
 
-completions = hyperion_client.well_completion(payload)
-print(completions)
+# return result is in pandas.DataFrame
+completions_df = hyperion_client.well_completion(payload)
+print(completions_df.count())
 
-# output 
-# {'data': [{....}, {....}....], 'pagination': {'page_size': 500, 'start': 0, 'total_count': 250}}
+# output is in pandas.DataFrame
+# Querying API pages: 100%|██████████| 8/8 [00:06<00:00,  1.14it/s]
 
 ## Well data
-result_list = hyperion_client.wells(payload)
+result_df = hyperion_client.wells(payload)
 
 ## Product by Country and Operator
-result_list = hyperion_client.production_by_county_and_operator(payload)
-
+result_df = hyperion_client.production_by_county_and_operator(payload)
 
 ## Available api methods on hyperion_client
 dir(hyperion_client)
 # output: ['ducs_by_operator', 'fetch_regions', 'frac_crews', 'production_by_county_and_operator', 'production_by_well', 'rigs', 'well_completion', 'wells']
 
 ```
-
 
 ## publishing package
 
