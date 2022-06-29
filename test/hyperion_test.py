@@ -15,7 +15,7 @@ def fetch_region():
 def well_completion():
     payload = ApiPayload(start_date='2021-01-1', end_date='2022-06-25', state_code='TX')
 
-    result_df = client.wells(payload)
+    result_df = client.wells()
     print(result_df.count())
 
 

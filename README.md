@@ -71,9 +71,14 @@ payload.fetch_all = False
 # return result is in pandas.DataFrame
 completions_df = hyperion_client.well_completion(payload)
 print(completions_df.count())
-
 # output is in pandas.DataFrame
 # Querying API pages: 100%|██████████| 8/8 [00:06<00:00,  1.14it/s]
+
+# with optional payload to fetch full dataset
+result_df = hyperion_client.wells()
+print(result_df.count())
+# Querying API wells pages:   0%|          | 4/7225 [00:16<8:51:17,  4.41s/it]
+
 
 ## Well data
 result_df = hyperion_client.wells(payload)
