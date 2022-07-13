@@ -9,6 +9,8 @@ from synmax.common.model import PayloadModelBase
 
 LOGGER = logging.getLogger(__name__)
 
+_api_timeout = 300
+
 
 class ApiClient:
     def __init__(self, access_token):
@@ -55,7 +57,7 @@ class ApiClient:
         :rtype: requests.Response
         """
         LOGGER.info(url)
-        response = self.session.get(url, params=params, **kwargs)
+        response = self.session.get(url, params=params, timeout=_api_timeout, **kwargs)
         json_result = self._return_response(response, return_json)
         df = pandas.DataFrame(json_result['data'])
         return df
@@ -76,26 +78,33 @@ class ApiClient:
 
         data_list: List[Dict] = []
 
-        total_count = 1
-        with tqdm(desc=F"Querying API {url} pages", total=total_count, dynamic_ncols=True, miniters=0) as progress_bar:
-            while True:
+        response = self.session.post(url, data=payload.payload(), timeout=_api_timeout, **kwargs)
+        json_result = self._return_response(response, return_json)
+        data_list.extend(json_result['data'])
+
+        pagination = json_result['pagination']
+        total_count = pagination['total_count']
+        total_pages = pagination['total_count'] // pagination['page_size']
+        total_pages = total_pages + 1 if total_count % pagination['page_size'] > 0 else 0
+
+        # first page fetched in the above
+        total_pages -= 1
+
+        LOGGER.info('Total data size: %s, total pages to scan: %s', total_count, total_pages)
+
+        with tqdm(desc=F"Querying API {url} pages", total=total_pages, dynamic_ncols=True, miniters=0) as progress_bar:
+            while total_count >= pagination['start'] + pagination['page_size']:
                 progress_bar.refresh()
-                response = self.session.post(url, data=payload.payload(), **kwargs)
+
+                payload.pagination_start = pagination['start'] + pagination['page_size']
+                response = self.session.post(url, data=payload.payload(), timeout=_api_timeout, **kwargs)
                 json_result = self._return_response(response, return_json)
+
                 pagination = json_result['pagination']
                 data_list.extend(json_result['data'])
                 progress_bar.update()
 
-                if not payload.fetch_all or pagination['total_count'] <= pagination['start'] + pagination['page_size']:
-                    break
-
-                payload.pagination_start = pagination['start'] + pagination['page_size']
-                if total_count == 1:
-                    total_count = pagination['total_count'] // pagination['page_size']
-                    total_count = total_count + 1 if pagination['total_count'] % pagination['page_size'] > 0 else 0
-                    progress_bar.reset(total_count)
-                    progress_bar.update(1)
-
+        payload.pagination_start = 0
         LOGGER.info('Total response data: %s', len(data_list))
         df = pandas.DataFrame(data_list)
         return df

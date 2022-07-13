@@ -7,7 +7,8 @@ class PayloadModelBase:
     start_date: str = None
     end_date: str = None
     pagination_start: int = 0
-    fetch_all = True
+
+    # fetch_all = True
 
     def payload(self):
         # just intercept the payload calls so they aren't relayed to `object`

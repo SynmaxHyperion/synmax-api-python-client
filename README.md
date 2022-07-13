@@ -66,7 +66,6 @@ hyperion_client = HyperionApiClient(access_token=access_token)
 # fetch_all = True will paginate all of rows and return accumulation of each page result. True by default
 # set fetch_all=False to get first page or any single page starting row with payload.pagination_start = <start row index, default to 0>
 payload = ApiPayload(start_date='2022-06-1', end_date='2022-06-25', state_code='TX')
-payload.fetch_all = False
 
 # return result is in pandas.DataFrame
 completions_df = hyperion_client.well_completion(payload)

@@ -13,14 +13,34 @@ def fetch_region():
 
 
 def well_completion():
-    payload = ApiPayload(start_date='2021-01-1', end_date='2022-06-25', state_code='TX')
+    payload = ApiPayload(start_date='2021-05-1', end_date='2022-06-25', state_code='TX')
 
-    result_df = client.wells()
+    result_df = client.wells(payload)
+    print(result_df.count())
+
+
+def test_ducs_by_operator():
+    payload = ApiPayload(start_date='2021-01-01', end_date='2021-01-31')
+
+    result_df = client.ducs_by_operator(payload)
+    print(result_df.count())
+
+
+def test_production_by_county_and_operator():
+    payload = ApiPayload(start_date='2018-01-01', end_date='2018-01-31')
+    result_df = client.production_by_county_and_operator(payload)
+    print(result_df.count())
+
+
+def test_production_by_well():
+    payload = ApiPayload(start_date='2016-01-01', end_date='2016-01-31')
+    result_df = client.production_by_well(payload)
     print(result_df.count())
 
 
 def main():
     # fetch_region()
+    # well_completion()
     well_completion()
 
 
