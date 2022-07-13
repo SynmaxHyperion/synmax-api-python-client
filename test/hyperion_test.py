@@ -41,7 +41,7 @@ def test_production_by_well():
 def main():
     # fetch_region()
     # well_completion()
-    well_completion()
+    test_production_by_county_and_operator()
 
 
 if __name__ == '__main__':

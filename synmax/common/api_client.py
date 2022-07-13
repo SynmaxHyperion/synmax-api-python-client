@@ -3,13 +3,15 @@ from typing import List, Dict
 
 import pandas
 import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 from tqdm import tqdm
 
 from synmax.common.model import PayloadModelBase
 
 LOGGER = logging.getLogger(__name__)
 
-_api_timeout = 300
+_api_timeout = 600
 
 
 class ApiClient:
@@ -18,6 +20,18 @@ class ApiClient:
         self.session = requests.Session()
         # update headers
         self.session.headers.update(self.headers)
+
+        # HTTPAdapter
+        retry_strategy = Retry(
+            total=5,
+            backoff_factor=1,
+            status_forcelist=[408, 429, 500, 502, 503, 504, 505],
+            method_whitelist=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE"],
+
+        )
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        self.session.mount("https://", adapter)
+        self.session.mount("http://", adapter)
 
     @property
     def headers(self):
@@ -95,7 +109,6 @@ class ApiClient:
         with tqdm(desc=F"Querying API {url} pages", total=total_pages, dynamic_ncols=True, miniters=0) as progress_bar:
             while total_count >= pagination['start'] + pagination['page_size']:
                 progress_bar.refresh()
-
                 payload.pagination_start = pagination['start'] + pagination['page_size']
                 response = self.session.post(url, data=payload.payload(), timeout=_api_timeout, **kwargs)
                 json_result = self._return_response(response, return_json)
