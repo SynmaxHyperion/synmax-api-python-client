@@ -102,6 +102,55 @@ class ApiClient:
         LOGGER.info('Payload data: %s', payload)
 
         data_list: List[Dict] = []
+        got_first_page = False
+        total_count = -1
+
+        with tqdm(desc=F"Querying API {url} pages", total=1, dynamic_ncols=True, miniters=0) as progress_bar:
+            while not got_first_page or total_count >= pagination['start'] + pagination['page_size']:
+                try:
+                    progress_bar.refresh()
+                    response = self.session.post(url, data=payload.payload(), timeout=_api_timeout, **kwargs)
+                    if response.status_code == 401:
+                        progress_bar.update()
+                        LOGGER.error(response.text)
+                        return pandas.DataFrame()
+
+                    json_result = self._return_response(response, return_json)
+                    pagination = json_result['pagination']
+
+                    if not got_first_page:
+                        total_count = pagination['total_count']
+                        total_pages = pagination['total_count'] // pagination['page_size']
+                        total_pages = total_pages + 1 if total_count % pagination['page_size'] > 0 else 0
+                        progress_bar.reset(total=total_pages)
+                        LOGGER.info('Total data size: %s, total pages to scan: %s', total_count, total_pages)
+                        got_first_page = True
+
+                    data_list.extend(json_result['data'])
+                    payload.pagination_start = pagination['start'] + pagination['page_size']
+                    progress_bar.update()
+                except:
+                    pass
+        payload.pagination_start = 0
+        LOGGER.info('Total response data: %s', len(data_list))
+        df = pandas.DataFrame(data_list)
+        return df
+
+    def post_v1(self, url, payload: PayloadModelBase = None, return_json=False, **kwargs) -> pandas.DataFrame:
+        r"""Sends a POST request.
+
+        :param url: URL for the new :class:`Request` object.
+        :param payload: (optional) Dictionary, list of tuples, bytes, or file-like
+            object to send in the body of the :class:`Request`.
+        :param return_json:
+        :param \*\*kwargs: Optional arguments that ``request`` takes.
+        :return: :class:`Response <Response>` object
+        :rtype: requests.Response
+        """
+
+        LOGGER.info('Payload data: %s', payload)
+
+        data_list: List[Dict] = []
 
         response = self.session.post(url, data=payload.payload(), timeout=_api_timeout, **kwargs)
         json_result = self._return_response(response, return_json)
