@@ -24,7 +24,7 @@ class ApiClient:
 
         # HTTPAdapter
         retry_strategy = Retry(
-            total=8,
+            total=10,
             backoff_factor=2,
             status_forcelist=[408, 429, 500, 502, 503, 504, 505],
             method_whitelist=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE"],
