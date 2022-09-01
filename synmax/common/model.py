@@ -7,6 +7,7 @@ class PayloadModelBase:
     start_date: str = None
     end_date: str = None
     pagination_start: int = 0
+    production_month: int = 0
 
     # fetch_all = True
 
