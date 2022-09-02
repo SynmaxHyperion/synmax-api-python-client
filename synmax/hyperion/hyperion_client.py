@@ -9,7 +9,8 @@ from synmax.common import ApiClient, PayloadModelBase
 
 LOGGER = logging.getLogger(__name__)
 
-_API_BASE = 'https://hyperion.api.synmax.com/'
+# _API_BASE = 'https://hyperion.api.synmax.com/'
+_API_BASE = 'http://127.0.0.1:8080/'
 
 
 @dataclass
@@ -19,6 +20,7 @@ class ApiPayload(PayloadModelBase):
             "start_date": self.start_date,
             "end_date": self.end_date,
             "state_code": self.state_code,
+            "production_month": self.production_month,
             "pagination": {
                 "start": self.pagination_start
             }
