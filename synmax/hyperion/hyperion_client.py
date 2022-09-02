@@ -9,9 +9,6 @@ from synmax.common import ApiClient, PayloadModelBase
 
 LOGGER = logging.getLogger(__name__)
 
-_API_BASE = 'https://hyperion.api.synmax.com/'
-# _API_BASE = 'http://127.0.0.1:8080/'
-
 
 @dataclass
 class ApiPayload(PayloadModelBase):
@@ -29,32 +26,42 @@ class ApiPayload(PayloadModelBase):
 
 
 class HyperionApiClient(object):
-    def __init__(self, access_token: str = None):
+    def __init__(self, access_token: str = None, local_server=False):
+        """
+
+        :param access_token:
+        :param local_server:
+        """
+
         if access_token is None:
             access_token = os.getenv('access_token')
         self.access_key = access_token
+        if local_server:
+            self._base_uri = 'http://127.0.0.1:8080/'
+        else:
+            self._base_uri = 'https://hyperion.api.synmax.com/'
         self.api_client = ApiClient(access_token=access_token)
 
     def fetch_regions(self) -> pandas.DataFrame:
-        return self.api_client.get(f"{_API_BASE}/regions", return_json=True)
+        return self.api_client.get(f"{self._base_uri}/regions", return_json=True)
 
     def well_completion(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
-        return self.api_client.post(f"{_API_BASE}/completions", payload=payload, return_json=True)
+        return self.api_client.post(f"{self._base_uri}/completions", payload=payload, return_json=True)
 
     def ducs_by_operator(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
-        return self.api_client.post(f"{_API_BASE}/ducsbyoperator", payload=payload, return_json=True)
+        return self.api_client.post(f"{self._base_uri}/ducsbyoperator", payload=payload, return_json=True)
 
     def frac_crews(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
-        return self.api_client.post(f"{_API_BASE}/fraccrews", payload=payload, return_json=True)
+        return self.api_client.post(f"{self._base_uri}/fraccrews", payload=payload, return_json=True)
 
     def production_by_county_and_operator(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
-        return self.api_client.post(f"{_API_BASE}/productionbycountyandoperator", payload=payload, return_json=True)
+        return self.api_client.post(f"{self._base_uri}/productionbycountyandoperator", payload=payload, return_json=True)
 
     def production_by_well(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
-        return self.api_client.post(f"{_API_BASE}/productionbywell", payload=payload, return_json=True)
+        return self.api_client.post(f"{self._base_uri}/productionbywell", payload=payload, return_json=True)
 
     def rigs(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
-        return self.api_client.post(f"{_API_BASE}/rigs", payload=payload, return_json=True)
+        return self.api_client.post(f"{self._base_uri}/rigs", payload=payload, return_json=True)
 
     def wells(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
-        return self.api_client.post(f"{_API_BASE}/wells", payload=payload, return_json=True)
+        return self.api_client.post(f"{self._base_uri}/wells", payload=payload, return_json=True)

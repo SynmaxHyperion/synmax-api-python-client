@@ -4,7 +4,7 @@ from synmax.hyperion import HyperionApiClient, ApiPayload
 
 logging.basicConfig(level=logging.INFO)
 
-client = HyperionApiClient()
+client = HyperionApiClient(local_server=False)
 
 
 def fetch_region():
