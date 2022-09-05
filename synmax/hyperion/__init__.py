@@ -3,16 +3,25 @@ import pandas as pd
 import os
 from .hyperion_client import HyperionApiClient, ApiPayload
 
+
 def monthly_to_daily(row, prod_column='gas_monthly', date_column='date'):
+    """
+
+    :param row:
+    :param prod_column:
+    :param date_column:
+    :return:
+    """
     NumberTypes = (int, float)
     if isinstance(row[prod_column], NumberTypes):
         date_ = pd.to_datetime(row[date_column])
         days = calendar.monthrange(date_.year, date_.month)[1]
 
-        return row[prod_column]/days
+        return row[prod_column] / days
     return 0
 
-def add_daily(df: pd.DataFrame, date_column = 'date', monthly_columns=['gas_monthly', 'oil_monthly', 'water_monthly'],
+
+def add_daily(df: pd.DataFrame, date_column='date', monthly_columns=['gas_monthly', 'oil_monthly', 'water_monthly'],
               daily_columns=['gas_daily', 'oil_daily', 'water_daily']):
     """
     Used to add daily production columns to a Pandas dataframe containing monthly production columns.
@@ -31,6 +40,7 @@ def add_daily(df: pd.DataFrame, date_column = 'date', monthly_columns=['gas_mont
 
     return df
 
+
 def get_fips():
     """
     Returns lookup table for FIPS codes
@@ -38,6 +48,7 @@ def get_fips():
     """
     from config import dirname
     return pd.read_csv(os.path.join(dirname, 'data', 'fips_lookup.csv'))
+
 
 def make_fips():
     fips_df = pd.read_csv(
