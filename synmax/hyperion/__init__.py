@@ -1,6 +1,9 @@
 import calendar
-import pandas as pd
 import os
+
+import pandas as pd
+
+from config import DATA_FOLDER
 from .hyperion_client import HyperionApiClient, ApiPayload
 
 
@@ -46,8 +49,7 @@ def get_fips():
     Returns lookup table for FIPS codes
     :return: Pandas dataframe
     """
-    from config import dirname
-    return pd.read_csv(os.path.join(dirname, 'data', 'fips_lookup.csv'))
+    return pd.read_csv(os.path.join(DATA_FOLDER, 'fips_lookup.csv'))
 
 
 def make_fips():
