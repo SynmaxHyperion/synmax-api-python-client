@@ -11,6 +11,6 @@ class PayloadModelBase:
 
     # fetch_all = True
 
-    def payload(self):
+    def payload(self, pagination_start=None):
         # just intercept the payload calls so they aren't relayed to `object`
         pass

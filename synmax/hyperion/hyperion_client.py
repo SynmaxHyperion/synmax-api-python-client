@@ -12,14 +12,14 @@ LOGGER = logging.getLogger(__name__)
 
 @dataclass
 class ApiPayload(PayloadModelBase):
-    def payload(self) -> str:
+    def payload(self, pagination_start=None) -> str:
         _payload = {
             "start_date": self.start_date,
             "end_date": self.end_date,
             "state_code": self.state_code,
             "production_month": self.production_month,
             "pagination": {
-                "start": self.pagination_start
+                "start": pagination_start if pagination_start else self.pagination_start
             }
         }
         return json.dumps(_payload)
@@ -55,10 +55,15 @@ class HyperionApiClient(object):
         return self.api_client.post(f"{self._base_uri}/fraccrews", payload=payload, return_json=True)
 
     def production_by_county_and_operator(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
-        return self.api_client.post(f"{self._base_uri}/productionbycountyandoperator", payload=payload, return_json=True)
+        return self.api_client.post(f"{self._base_uri}/productionbycountyandoperator", payload=payload,
+                                    return_json=True)
 
     def production_by_well(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
-        return self.api_client.post(f"{self._base_uri}/productionbywell", payload=payload, return_json=True)
+        # return self.api_client.post(f"{self._base_uri}/productionbywell", payload=payload, return_json=True)
+        return self.api_client.post_async(f"{self._base_uri}/productionbywell", payload=payload, return_json=True)
+
+    def production_by_well_async(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
+        return self.api_client.post_async(f"{self._base_uri}/productionbywell", payload=payload, return_json=True)
 
     def rigs(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/rigs", payload=payload, return_json=True)
