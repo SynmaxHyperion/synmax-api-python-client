@@ -41,6 +41,7 @@ def test_production_by_well():
     result_df = client.production_by_well(payload)
     print(result_df.count())
 
+
 def test_daily_func():
     df = pd.DataFrame({'date': ['2022-01-01', '2022-02-01', '2022-03-01'],
                        'gas_monthly': [1000, 2000, 3000],
@@ -50,17 +51,17 @@ def test_daily_func():
     df = add_daily(df)
     print(df)
 
+
 def test_add_fips():
-    df = pd.DataFrame({'date': ['2022-01-01', '2022-02-01', '2022-03-01'],
-                       'state_ab': ['TX', 'NM', 'LA'],
-                       'county': ['Midland', 'Lea', 'De Soto']})
     df = get_fips()
     print(df)
+
 
 def main():
     # fetch_region()
     # well_completion()
     test_production_by_well()
+    # test_add_fips()
 
 
 if __name__ == '__main__':
