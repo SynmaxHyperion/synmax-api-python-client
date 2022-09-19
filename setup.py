@@ -40,4 +40,7 @@ setup(
     # extras_require={"dev": DEV_REQUIRES},
     python_requires=">=3.7",
     include_package_data=True,
+    package_data={
+        'DATA': ['fips_lookup.csv'],
+    },
 )
