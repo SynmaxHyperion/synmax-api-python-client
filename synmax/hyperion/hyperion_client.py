@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 import pandas
 
-from synmax.common import ApiClient, PayloadModelBase
+from synmax.common import ApiClient, ApiClientAsync, PayloadModelBase
 
 LOGGER = logging.getLogger(__name__)
 
@@ -26,7 +26,7 @@ class ApiPayload(PayloadModelBase):
 
 
 class HyperionApiClient(object):
-    def __init__(self, access_token: str = None, local_server=False):
+    def __init__(self, access_token: str = None, local_server=False, async_client=True):
         """
 
         :param access_token:
@@ -40,7 +40,12 @@ class HyperionApiClient(object):
             self._base_uri = 'http://127.0.0.1:8080/'
         else:
             self._base_uri = 'https://hyperion.api.synmax.com/'
-        self.api_client = ApiClient(access_token=access_token)
+
+        if async_client:
+            LOGGER.info('Initializing async client')
+            self.api_client = ApiClientAsync(access_token=access_token)
+        else:
+            self.api_client = ApiClient(access_token=access_token)
 
     def fetch_regions(self) -> pandas.DataFrame:
         return self.api_client.get(f"{self._base_uri}/regions", return_json=True)
@@ -59,11 +64,7 @@ class HyperionApiClient(object):
                                     return_json=True)
 
     def production_by_well(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
-        # return self.api_client.post(f"{self._base_uri}/productionbywell", payload=payload, return_json=True)
-        return self.api_client.post_async(f"{self._base_uri}/productionbywell", payload=payload, return_json=True)
-
-    def production_by_well_async(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
-        return self.api_client.post_async(f"{self._base_uri}/productionbywell", payload=payload, return_json=True)
+        return self.api_client.post(f"{self._base_uri}/productionbywell", payload=payload, return_json=True)
 
     def rigs(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/rigs", payload=payload, return_json=True)

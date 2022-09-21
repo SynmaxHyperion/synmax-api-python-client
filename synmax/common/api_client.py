@@ -18,7 +18,7 @@ _api_timeout = 600
 PARALLEL_REQUESTS = 25
 
 
-class ApiClient:
+class ApiClientBase:
     def __init__(self, access_token):
         self.access_key = access_token
         self.session = requests.Session()
@@ -67,6 +67,9 @@ class ApiClient:
             return json_data
 
         return response
+
+
+class ApiClient(ApiClientBase):
 
     def get(self, url, params=None, return_json=False, **kwargs) -> pandas.DataFrame:
         r"""Sends a GET request.
@@ -187,6 +190,9 @@ class ApiClient:
         df = pandas.DataFrame(data_list)
         return df
 
+
+class ApiClientAsync(ApiClientBase):
+    
     async def _post_async(self, url, payload: PayloadModelBase, data_list, progress_bar, page_size, total_pages,
                           connector: aiohttp.TCPConnector):
         """
@@ -229,8 +235,9 @@ class ApiClient:
             progress_bar.update()
         await session.close()
 
-    def post_async(self, url, payload: PayloadModelBase = None, return_json=False, **kwargs) -> pandas.DataFrame:
-        r"""Sends a POST request.
+    def post(self, url, payload: PayloadModelBase = None, return_json=False, **kwargs) -> pandas.DataFrame:
+        r"""
+        Sends a POST request.
 
         :param url: URL for the new :class:`Request` object.
         :param payload: (optional) Dictionary, list of tuples, bytes, or file-like
