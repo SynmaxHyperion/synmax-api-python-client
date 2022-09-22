@@ -5,9 +5,15 @@ from typing import List, Dict
 import aiohttp
 import pandas
 import requests
+from aioretry import (
+    retry,
+    # Tuple[bool, Union[int, float]]
+    RetryPolicyStrategy,
+    RetryInfo
+)
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
 from tqdm import tqdm
+from urllib3 import Retry
 
 from synmax.common.model import PayloadModelBase
 
@@ -191,8 +197,25 @@ class ApiClient(ApiClientBase):
         return df
 
 
+def retry_policy(info: RetryInfo) -> RetryPolicyStrategy:
+    """
+    - It will always retry until succeeded
+    - If fails for the first time, it will retry immediately,
+    - If it fails again,
+      aioretry will perform a 100ms delay before the second retry,
+      200ms delay before the 3rd retry,
+      the 4th retry immediately,
+      100ms delay before the 5th retry,
+      etc...
+    """
+
+    # return False, (info.fails - 1) % 3 * 0.1
+    LOGGER.info('retry_policy: since -> %s, going to sleep sec --> %s', info.since, info.fails)
+    return False, info.fails
+
+
 class ApiClientAsync(ApiClientBase):
-    
+
     async def _post_async(self, url, payload: PayloadModelBase, data_list, progress_bar, page_size, total_pages,
                           connector: aiohttp.TCPConnector):
         """
@@ -210,6 +233,7 @@ class ApiClientAsync(ApiClientBase):
         semaphore = asyncio.Semaphore(PARALLEL_REQUESTS)
         session = aiohttp.ClientSession(connector=connector, headers=self.headers)
 
+        @retry(retry_policy)
         async def fetch_from_api(page_number):
             async with semaphore:
                 _data = payload.payload(pagination_start=page_number * page_size)

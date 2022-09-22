@@ -1,6 +1,9 @@
 import logging
+import multiprocessing
+from threading import Thread
 
 import pandas as pd
+from tqdm import tqdm
 
 from synmax.hyperion import HyperionApiClient, ApiPayload, add_daily, get_fips
 
@@ -38,8 +41,13 @@ def test_production_by_well():
     # payload = ApiPayload(start_date='2016-01-01', end_date='2016-01-31', production_month=529)
     payload = ApiPayload(state_code='WY', start_date='2017-01-01', end_date='2017-12-31')
     # payload = ApiPayload(state_code='LA', start_date='2021-01-01', end_date='2021-01-01', production_month=2)
-    result_df = client.production_by_well(payload)
-    print(result_df.count())
+    # result_df = client.production_by_well(payload)
+    # print(result_df.count())
+    with multiprocessing.Pool(processes=5) as pool:
+        data_list = [payload for _ in range(0, 5)]
+        message = 'API query progress'
+        list(tqdm(pool.imap(client.production_by_well, data_list), desc=message, total=len(data_list),
+                  dynamic_ncols=True, miniters=0))
 
 
 def test_daily_func():
