@@ -208,9 +208,9 @@ def retry_policy(info: RetryInfo) -> RetryPolicyStrategy:
       100ms delay before the 5th retry,
       etc...
     """
-
+    # LOGGER.info('retry_policy: since -> %s, going to sleep sec --> %s', info.since, info.fails)
     # return False, (info.fails - 1) % 3 * 0.1
-    LOGGER.info('retry_policy: since -> %s, going to sleep sec --> %s', info.since, info.fails)
+
     return False, info.fails
 
 
