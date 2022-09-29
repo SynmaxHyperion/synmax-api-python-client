@@ -1,7 +1,7 @@
 import logging
 import multiprocessing
-from threading import Thread
 
+import pandas
 import pandas as pd
 from tqdm import tqdm
 
@@ -20,8 +20,24 @@ def fetch_region():
 def well_completion():
     payload = ApiPayload(start_date='2021-05-1', end_date='2022-06-25', state_code='TX')
 
-    result_df = client.wells(payload)
+    # result_df = client.wells(payload)
+    result_df = client.well_completion()
     print(result_df.count())
+
+
+def test_rigs():
+    states = ['CO', 'LA', 'ND', 'NM', 'OH', 'OK', 'PA', 'TX', 'WV', 'WY']
+    df_list = []
+    for _state in states:
+        payload = ApiPayload(start_date='2016-01-01', end_date='2022-01-31', state_code=_state)
+        result_df = client.rigs(payload)
+        print(result_df.count())
+        df_list.append(result_df)
+
+    print('Got all stats result')
+    if df_list:
+        df = pandas.concat(df_list)
+        print(df.count())
 
 
 def test_ducs_by_operator():
@@ -37,6 +53,13 @@ def test_production_by_county_and_operator():
     print(result_df.count())
 
 
+def test_frac_crews():
+    payload = ApiPayload(start_date='2021-01-01', end_date='2021-12-31')
+
+    result_df = client.frac_crews(payload)
+    print(result_df.count())
+
+
 def test_production_by_well():
     # payload = ApiPayload(start_date='2016-01-01', end_date='2016-01-31', production_month=529)
     payload = ApiPayload(state_code='WY', start_date='2017-01-01', end_date='2017-12-31')
@@ -48,6 +71,18 @@ def test_production_by_well():
         message = 'API query progress'
         list(tqdm(pool.imap(client.production_by_well, data_list), desc=message, total=len(data_list),
                   dynamic_ncols=True, miniters=0))
+
+
+def test_short_term_forecast():
+    payload = ApiPayload(start_date='2021-08-29', end_date='2022-09-29')
+    result_df = client.short_term_forecast(payload)
+    print(result_df.count())
+
+
+def test_short_term_forecast_history():
+    payload = ApiPayload(start_date='2021-08-29', end_date='2021-09-10')
+    result_df = client.short_term_forecast_history(payload)
+    print(result_df.count())
 
 
 def test_daily_func():
@@ -68,8 +103,12 @@ def test_add_fips():
 def main():
     # fetch_region()
     # well_completion()
-    test_production_by_well()
+    # test_production_by_well()
     # test_add_fips()
+    # test_frac_crews()
+    # test_rigs()
+    # test_short_term_forecast()
+    test_short_term_forecast_history()
 
 
 if __name__ == '__main__':

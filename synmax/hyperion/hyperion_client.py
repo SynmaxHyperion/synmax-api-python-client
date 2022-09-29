@@ -71,3 +71,9 @@ class HyperionApiClient(object):
 
     def wells(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/wells", payload=payload, return_json=True)
+
+    def short_term_forecast(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
+        return self.api_client.post(f"{self._base_uri}/shorttermforecast", payload=payload, return_json=True)
+
+    def short_term_forecast_history(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
+        return self.api_client.post(f"{self._base_uri}/shorttermforecasthistory", payload=payload, return_json=True)
