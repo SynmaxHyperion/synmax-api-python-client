@@ -21,7 +21,7 @@ def well_completion():
     payload = ApiPayload(start_date='2021-05-1', end_date='2022-06-25', state_code='TX')
 
     # result_df = client.wells(payload)
-    result_df = client.well_completion()
+    result_df = client.well_completion(payload)
     print(result_df.count())
 
 
@@ -54,7 +54,7 @@ def test_production_by_county_and_operator():
 
 
 def test_frac_crews():
-    payload = ApiPayload(start_date='2021-01-01', end_date='2021-12-31')
+    payload = ApiPayload(start_date='2022-01-01')
 
     result_df = client.frac_crews(payload)
     print(result_df.count())
@@ -74,15 +74,22 @@ def test_production_by_well():
 
 
 def test_short_term_forecast():
-    payload = ApiPayload(start_date='2021-08-29', end_date='2022-09-29')
+    # payload = ApiPayload(start_date='2021-08-29', end_date='2022-09-29')
+    payload = ApiPayload(start_date='2020-01-01')
     result_df = client.short_term_forecast(payload)
+    result_df.to_csv('df_data.csv', index=False)
     print(result_df.count())
+    sum_df = result_df[['date', 'gas_monthly']].groupby(by=['date']).sum()
+    sum_df.to_csv('sum.csv')
 
 
 def test_short_term_forecast_history():
     payload = ApiPayload(start_date='2021-08-29', end_date='2021-09-10')
     result_df = client.short_term_forecast_history(payload)
     print(result_df.count())
+
+    payload = ApiPayload(start_date='2020-01-01')
+    result_df = client.short_term_forecast(payload)
 
 
 def test_daily_func():
@@ -100,15 +107,29 @@ def test_add_fips():
     print(df)
 
 
+def compare_df():
+    cols = ['api', 'gas_monthly']
+    df1 = pandas.read_csv('df_data.csv')
+    df2 = pandas.read_csv('GEOML_dbo_v_current_forecast.csv')
+    df1 = df1[cols]
+    df2 = df2[cols]
+    print(df1.count())
+    print(df2.count())
+
+    merged_df = pd.merge(df1, df2, how="inner", on=["api"])
+    print(merged_df.count())
+
+
 def main():
-    # fetch_region()
+    fetch_region()
     # well_completion()
     # test_production_by_well()
     # test_add_fips()
     # test_frac_crews()
     # test_rigs()
     # test_short_term_forecast()
-    test_short_term_forecast_history()
+    # test_short_term_forecast_history()
+    # compare_df()
 
 
 if __name__ == '__main__':

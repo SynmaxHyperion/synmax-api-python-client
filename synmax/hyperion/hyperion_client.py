@@ -47,8 +47,10 @@ class HyperionApiClient(object):
         else:
             self.api_client = ApiClient(access_token=access_token)
 
+        self.api_client_sync = ApiClient(access_token=access_token)
+
     def fetch_regions(self) -> pandas.DataFrame:
-        return self.api_client.get(f"{self._base_uri}/regions", return_json=True)
+        return self.api_client_sync.get(f"{self._base_uri}/regions", return_json=True)
 
     def well_completion(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/completions", payload=payload, return_json=True)
@@ -75,5 +77,14 @@ class HyperionApiClient(object):
     def short_term_forecast(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/shorttermforecast", payload=payload, return_json=True)
 
+    def long_term_forecast(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
+        return self.api_client.post(f"{self._base_uri}/longtermforecast", payload=payload, return_json=True)
+
     def short_term_forecast_history(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/shorttermforecasthistory", payload=payload, return_json=True)
+
+    def operator_classification(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
+        return self.api_client.post(f"{self._base_uri}/operatorclassification", payload=payload, return_json=True)
+
+    def daily_production(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
+        return self.api_client.post(f"{self._base_uri}/dailyproduction", payload=payload, return_json=True)
