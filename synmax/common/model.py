@@ -3,11 +3,15 @@ from dataclasses import dataclass
 
 @dataclass
 class PayloadModelBase:
-    state_code: str = None
+    pagination_start: int = 0
     start_date: str = None
     end_date: str = None
-    pagination_start: int = 0
+
     production_month: int = 0
+    state_code: str = None
+    region: str = None
+    sub_region: str = None
+    operator_name: str = None
 
     # fetch_all = True
 
