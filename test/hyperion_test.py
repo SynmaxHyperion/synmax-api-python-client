@@ -143,16 +143,23 @@ def main():
     fetch_long_term_forecast()
 
     # Test POST
-    well_completion()
-    test_production_by_well()
-    test_add_fips()
-    test_frac_crews()
-    test_rigs()
-    test_short_term_forecast()
-    test_short_term_forecast_history()
+    #well_completion()
+    #test_production_by_well()
+    #test_add_fips()
+    #test_frac_crews()
+    #test_rigs()
+    #test_short_term_forecast()
+    #test_short_term_forecast_history()
     
     #compare_df()
 
 
 if __name__ == '__main__':
+    """
+    # enable debug if required.
+    logging.basicConfig(level=logging.DEBUG)
+
+    access_token = ''
+    hyperion_client = HyperionApiClient(access_token=access_token)
+    """
     main()
