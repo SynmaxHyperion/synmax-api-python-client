@@ -133,9 +133,13 @@ def compare_df():
 
 
 def main():
+
+    # Test GET
     fetch_region()
     fetch_operator_classification()
     fetch_long_term_forecast()
+
+    # Test POST
     well_completion()
     test_production_by_well()
     test_add_fips()
