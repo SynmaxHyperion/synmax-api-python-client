@@ -16,8 +16,13 @@ class ApiPayload(PayloadModelBase):
         _payload = {
             "start_date": self.start_date,
             "end_date": self.end_date,
+
             "state_code": self.state_code,
+            "region": self.region,
+            "sub_region": self.sub_region,
+            "operator_name":self.operator_name,
             "production_month": self.production_month,
+            
             "pagination": {
                 "start": pagination_start if pagination_start else self.pagination_start
             }
@@ -49,8 +54,18 @@ class HyperionApiClient(object):
 
         self.api_client_sync = ApiClient(access_token=access_token)
 
+    # GET
+
     def fetch_regions(self) -> pandas.DataFrame:
         return self.api_client_sync.get(f"{self._base_uri}/regions", return_json=True)
+
+    def fetch_operator_classification(self) -> pandas.DataFrame:
+        return self.api_client_sync.get(f"{self._base_uri}/operatorclassification", return_json=True)
+
+    def fetch_long_term_forecast(self) -> pandas.DataFrame:
+        return self.api_client_sync.get(f"{self._base_uri}/longtermforecast", return_json=True)
+
+    # POST
 
     def well_completion(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/completions", payload=payload, return_json=True)
@@ -77,14 +92,8 @@ class HyperionApiClient(object):
     def short_term_forecast(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/shorttermforecast", payload=payload, return_json=True)
 
-    def long_term_forecast(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
-        return self.api_client.post(f"{self._base_uri}/longtermforecast", payload=payload, return_json=True)
-
     def short_term_forecast_history(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/shorttermforecasthistory", payload=payload, return_json=True)
-
-    def operator_classification(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
-        return self.api_client.post(f"{self._base_uri}/operatorclassification", payload=payload, return_json=True)
 
     def daily_production(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/dailyproduction", payload=payload, return_json=True)

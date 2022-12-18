@@ -12,13 +12,25 @@ logging.basicConfig(level=logging.INFO)
 client = HyperionApiClient(local_server=False)
 
 
+# Test - GET 
+
 def fetch_region():
     regions = client.fetch_regions()
     print(regions)
 
+def fetch_long_term_forecast():
+    long_term_forecast = client.fetch_long_term_forecast()
+    print(long_term_forecast)
+
+def fetch_operator_classification():
+    operator_classification = client.fetch_operator_classification()
+    print(operator_classification)
+
+
+# Test - POST 
 
 def well_completion():
-    payload = ApiPayload(start_date='2021-05-1', end_date='2022-06-25', state_code='TX')
+    payload = ApiPayload(start_date='2021-05-1', end_date='2022-06-25', state_code='CO', operator_name='GREAT WESTERN OPERATING COMPANY LLC')
 
     # result_df = client.wells(payload)
     result_df = client.well_completion(payload)
@@ -41,20 +53,20 @@ def test_rigs():
 
 
 def test_ducs_by_operator():
-    payload = ApiPayload(start_date='2021-01-01', end_date='2021-01-31')
+    payload = ApiPayload(start_date='2021-01-01', end_date='2021-01-31', operator_name='LIME ROCK RESOURCES LP')
 
     result_df = client.ducs_by_operator(payload)
     print(result_df.count())
 
 
 def test_production_by_county_and_operator():
-    payload = ApiPayload(start_date='2018-01-01', end_date='2018-01-31')
+    payload = ApiPayload(start_date='1929-04-01', end_date='1934-01-01', operator_name='Stephens Production Company', state_code='AR')
     result_df = client.production_by_county_and_operator(payload)
     print(result_df.count())
 
 
 def test_frac_crews():
-    payload = ApiPayload(start_date='2022-01-01')
+    payload = ApiPayload(start_date='2021-10-01', end_date='2021-12-31', state_code='CO', sub_region='Colorado wo SJ', region='west', operator_name='BILL BARRETT CORPORATION')
 
     result_df = client.frac_crews(payload)
     print(result_df.count())
@@ -62,7 +74,7 @@ def test_frac_crews():
 
 def test_production_by_well():
     # payload = ApiPayload(start_date='2016-01-01', end_date='2016-01-31', production_month=529)
-    payload = ApiPayload(state_code='WY', start_date='2017-01-01', end_date='2017-12-31')
+    payload = ApiPayload(state_code='WY', start_date='2017-01-01', end_date='2017-12-31', operator_name='CITATION OIL & GAS CORP', region='west', sub_region='Wyoming')
     # payload = ApiPayload(state_code='LA', start_date='2021-01-01', end_date='2021-01-01', production_month=2)
     # result_df = client.production_by_well(payload)
     # print(result_df.count())
@@ -75,7 +87,7 @@ def test_production_by_well():
 
 def test_short_term_forecast():
     # payload = ApiPayload(start_date='2021-08-29', end_date='2022-09-29')
-    payload = ApiPayload(start_date='2020-01-01')
+    payload = ApiPayload(start_date='2022-09-01',state_code='LA', region = 'gulf', sub_region = 'Haynesville - LA', operator_name='MINERAL VENTURES, INC.')
     result_df = client.short_term_forecast(payload)
     result_df.to_csv('df_data.csv', index=False)
     print(result_df.count())
@@ -91,6 +103,8 @@ def test_short_term_forecast_history():
     payload = ApiPayload(start_date='2020-01-01')
     result_df = client.short_term_forecast(payload)
 
+
+# TEST HELPERS
 
 def test_daily_func():
     df = pd.DataFrame({'date': ['2022-01-01', '2022-02-01', '2022-03-01'],
@@ -120,17 +134,32 @@ def compare_df():
     print(merged_df.count())
 
 
+
 def main():
+
+    # Test GET
     fetch_region()
-    # well_completion()
-    # test_production_by_well()
-    # test_add_fips()
-    # test_frac_crews()
-    # test_rigs()
-    # test_short_term_forecast()
-    # test_short_term_forecast_history()
-    # compare_df()
+    fetch_operator_classification()
+    fetch_long_term_forecast()
+
+    # Test POST
+    #well_completion()
+    #test_production_by_well()
+    #test_add_fips()
+    #test_frac_crews()
+    #test_rigs()
+    #test_short_term_forecast()
+    #test_short_term_forecast_history()
+    
+    #compare_df()
 
 
 if __name__ == '__main__':
+    """
+    # enable debug if required.
+    logging.basicConfig(level=logging.DEBUG)
+
+    access_token = ''
+    hyperion_client = HyperionApiClient(access_token=access_token)
+    """
     main()
