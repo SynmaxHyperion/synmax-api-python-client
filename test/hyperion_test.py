@@ -104,6 +104,8 @@ def test_short_term_forecast_history():
     result_df = client.short_term_forecast(payload)
 
 
+# TEST HELPERS
+
 def test_daily_func():
     df = pd.DataFrame({'date': ['2022-01-01', '2022-02-01', '2022-03-01'],
                        'gas_monthly': [1000, 2000, 3000],
@@ -130,6 +132,7 @@ def compare_df():
 
     merged_df = pd.merge(df1, df2, how="inner", on=["api"])
     print(merged_df.count())
+
 
 
 def main():
