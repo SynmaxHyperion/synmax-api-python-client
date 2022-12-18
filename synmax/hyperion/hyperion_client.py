@@ -54,6 +54,8 @@ class HyperionApiClient(object):
 
         self.api_client_sync = ApiClient(access_token=access_token)
 
+    # GET
+
     def fetch_regions(self) -> pandas.DataFrame:
         return self.api_client_sync.get(f"{self._base_uri}/regions", return_json=True)
 
@@ -62,6 +64,8 @@ class HyperionApiClient(object):
 
     def fetch_long_term_forecast(self) -> pandas.DataFrame:
         return self.api_client_sync.get(f"{self._base_uri}/longtermforecast", return_json=True)
+
+    # POST
 
     def well_completion(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/completions", payload=payload, return_json=True)
