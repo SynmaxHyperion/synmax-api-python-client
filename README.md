@@ -14,6 +14,8 @@ Make sure you have [Python 3.7+](https://docs.python.org/3/) and [pip](https://p
 
 ## Quickstart
 
+    Hyperion API Swagger doc: https://hyperion.api.synmax.com/apidocs/#/default
+
 ### Configuring synmax client
 
 ```python

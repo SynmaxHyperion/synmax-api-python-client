@@ -138,9 +138,9 @@ def compare_df():
 def main():
 
     # Test GET
-    fetch_region()
+    # fetch_region()
     fetch_operator_classification()
-    fetch_long_term_forecast()
+    # fetch_long_term_forecast()
 
     # Test POST
     #well_completion()
