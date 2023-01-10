@@ -16,6 +16,17 @@ Make sure you have [Python 3.7+](https://docs.python.org/3/) and [pip](https://p
 
     Hyperion API Swagger doc: https://hyperion.api.synmax.com/apidocs/#/default
 
+### Jupyter notebook setting 
+    run this block of code at the beggining of synmax api client
+```python
+
+!pip install nest_asyncio
+
+import nest_asyncio
+nest_asyncio.apply()
+
+After this run your code as usual.
+```
 ### Configuring synmax client
 
 ```python

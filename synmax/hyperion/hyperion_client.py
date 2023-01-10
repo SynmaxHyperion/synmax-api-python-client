@@ -2,14 +2,12 @@ import json
 import logging
 import os
 from dataclasses import dataclass
-import nest_asyncio
 
 import pandas
 
 from synmax.common import ApiClient, ApiClientAsync, PayloadModelBase
 
 LOGGER = logging.getLogger(__name__)
-nest_asyncio.apply()
 
 
 @dataclass
