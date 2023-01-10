@@ -2,12 +2,14 @@ import json
 import logging
 import os
 from dataclasses import dataclass
+import nest_asyncio
 
 import pandas
 
 from synmax.common import ApiClient, ApiClientAsync, PayloadModelBase
 
 LOGGER = logging.getLogger(__name__)
+nest_asyncio.apply()
 
 
 @dataclass
@@ -20,9 +22,9 @@ class ApiPayload(PayloadModelBase):
             "state_code": self.state_code,
             "region": self.region,
             "sub_region": self.sub_region,
-            "operator_name":self.operator_name,
+            "operator_name": self.operator_name,
             "production_month": self.production_month,
-            
+
             "pagination": {
                 "start": pagination_start if pagination_start else self.pagination_start
             }

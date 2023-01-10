@@ -4,3 +4,4 @@ pandas
 tqdm
 aiohttp
 aioretry
+nest_asyncio

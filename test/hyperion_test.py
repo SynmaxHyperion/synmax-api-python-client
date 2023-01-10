@@ -30,7 +30,7 @@ def fetch_operator_classification():
 # Test - POST 
 
 def well_completion():
-    payload = ApiPayload(start_date='2021-05-1', end_date='2022-06-25', state_code='CO', operator_name='GREAT WESTERN OPERATING COMPANY LLC')
+    payload = ApiPayload(start_date='2021-05-1', end_date='2022-12-25', state_code='CO', operator_name='GREAT WESTERN OPERATING COMPANY LLC')
 
     # result_df = client.wells(payload)
     result_df = client.well_completion(payload)
@@ -139,11 +139,11 @@ def main():
 
     # Test GET
     # fetch_region()
-    fetch_operator_classification()
+    # fetch_operator_classification()
     # fetch_long_term_forecast()
 
     # Test POST
-    #well_completion()
+    well_completion()
     #test_production_by_well()
     #test_add_fips()
     #test_frac_crews()
