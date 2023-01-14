@@ -20,7 +20,7 @@ class ApiPayload(PayloadModelBase):
             "state_code": self.state_code,
             "region": self.region,
             "sub_region": self.sub_region,
-            "operator_name": self.operator_name,
+            "operator": self.operator,
             "production_month": self.production_month,
 
             "pagination": {

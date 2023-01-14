@@ -11,7 +11,7 @@ class PayloadModelBase:
     state_code: str = None
     region: str = None
     sub_region: str = None
-    operator_name: str = None
+    operator: str = None
 
     # fetch_all = True
 
