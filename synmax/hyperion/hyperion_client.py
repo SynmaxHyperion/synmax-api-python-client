@@ -65,6 +65,9 @@ class HyperionApiClient(object):
     def fetch_long_term_forecast(self) -> pandas.DataFrame:
         return self.api_client_sync.get(f"{self._base_uri}/longtermforecast", return_json=True)
 
+    def fetch_daily_fracked_feet(self) -> pandas.DataFrame: 
+        return self.api_client_sync.get(f"{self._base_uri}/dailyfrackedfeet", return_json=True)
+
     # POST
 
     def well_completion(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
@@ -97,3 +100,5 @@ class HyperionApiClient(object):
 
     def daily_production(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/dailyproduction", payload=payload, return_json=True)
+
+
