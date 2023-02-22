@@ -26,6 +26,10 @@ def fetch_operator_classification():
     operator_classification = client.fetch_operator_classification()
     print(operator_classification)
 
+def fetch_daily_fracked_feet():
+    daily_fracked_feet = client.fetch_daily_fracked_feet()
+    print(daily_fracked_feet)
+
 
 # Test - POST 
 
@@ -141,9 +145,10 @@ def main():
     # fetch_region()
     # fetch_operator_classification()
     # fetch_long_term_forecast()
+    fetch_daily_fracked_feet()
 
     # Test POST
-    well_completion()
+    #well_completion()
     #test_production_by_well()
     #test_add_fips()
     #test_frac_crews()
