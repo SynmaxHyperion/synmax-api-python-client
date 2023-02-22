@@ -160,11 +160,13 @@ def main():
 
 
 if __name__ == '__main__':
-    """
+
     # enable debug if required.
+    """
     logging.basicConfig(level=logging.DEBUG)
 
     access_token = ''
+    
     hyperion_client = HyperionApiClient(access_token=access_token)
     """
     main()
