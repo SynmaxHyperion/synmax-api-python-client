@@ -22,6 +22,7 @@ class ApiPayload(PayloadModelBase):
             "sub_region": self.sub_region,
             "operator": self.operator,
             "production_month": self.production_month,
+            "nerc_id": self.nerc_id,
 
             "pagination": {
                 "start": pagination_start if pagination_start else self.pagination_start
@@ -100,5 +101,8 @@ class HyperionApiClient(object):
 
     def daily_production(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/dailyproduction", payload=payload, return_json=True)
+    
+    def coalstockpilevolumes(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
+        return self.api_client.post(f"{self._base_uri}/coalstockpilevolumes", payload=payload, return_json=True)
 
 
