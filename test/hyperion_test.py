@@ -91,7 +91,7 @@ def test_production_by_well():
 
 def test_short_term_forecast():
     # payload = ApiPayload(start_date='2021-08-29', end_date='2022-09-29')
-    payload = ApiPayload(start_date='2022-09-01',state_code='LA', region = 'gulf', sub_region = 'Haynesville - LA', operator_name='MINERAL VENTURES, INC.')
+    payload = ApiPayload(start_date='2016-01-01')
     result_df = client.short_term_forecast(payload)
     result_df.to_csv('df_data.csv', index=False)
     print(result_df.count())
@@ -145,7 +145,7 @@ def main():
     # fetch_region()
     # fetch_operator_classification()
     # fetch_long_term_forecast()
-    fetch_daily_fracked_feet()
+    # fetch_daily_fracked_feet()
 
     # Test POST
     #well_completion()
@@ -153,7 +153,7 @@ def main():
     #test_add_fips()
     #test_frac_crews()
     #test_rigs()
-    #test_short_term_forecast()
+    test_short_term_forecast()
     #test_short_term_forecast_history()
     
     #compare_df()

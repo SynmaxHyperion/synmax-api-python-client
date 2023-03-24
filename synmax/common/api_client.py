@@ -28,6 +28,7 @@ class ApiClientBase:
     def __init__(self, access_token):
         self.access_key = access_token
         self.session = requests.Session()
+        self.session.verify = False
         # update headers
         self.session.headers.update(self.headers)
 
