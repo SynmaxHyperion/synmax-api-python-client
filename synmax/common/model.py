@@ -14,6 +14,7 @@ class PayloadModelBase:
     operator: str = None
     api: list = None
     aggregate_by: str = None
+    forecast_run_date: str = None
 
     def payload(self, pagination_start=None):
         # just intercept the payload calls so they aren't relayed to `object`

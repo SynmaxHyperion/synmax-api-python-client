@@ -23,6 +23,7 @@ class ApiPayload(PayloadModelBase):
             "operator": self.operator,
             "production_month": self.production_month,
             "aggregate_by": self.aggregate_by,
+            "forecast_run_date": self.forecast_run_date,
 
             "pagination": {
                 "start": pagination_start if pagination_start else self.pagination_start
@@ -110,5 +111,3 @@ class HyperionApiClient(object):
 
     def daily_production(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/v2/dailyproduction", payload=payload, return_json=True)
-
-
