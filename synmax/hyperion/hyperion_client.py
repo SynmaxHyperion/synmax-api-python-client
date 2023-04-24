@@ -16,12 +16,13 @@ class ApiPayload(PayloadModelBase):
         _payload = {
             "start_date": self.start_date,
             "end_date": self.end_date,
-
+            "api": self.api,
             "state_code": self.state_code,
             "region": self.region,
             "sub_region": self.sub_region,
             "operator": self.operator,
             "production_month": self.production_month,
+            "aggregate_by": self.aggregate_by,
 
             "pagination": {
                 "start": pagination_start if pagination_start else self.pagination_start
