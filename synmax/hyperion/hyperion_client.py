@@ -29,6 +29,10 @@ class ApiPayload(PayloadModelBase):
                 "start": pagination_start if pagination_start else self.pagination_start
             }
         }
+        
+        if _payload["production_month"] == None: 
+            _payload.pop("production_month",  None)
+            
         return json.dumps(_payload)
 
 
