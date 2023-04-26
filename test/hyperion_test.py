@@ -57,7 +57,7 @@ def test_rigs():
 
 
 def test_ducs_by_operator():
-    payload = ApiPayload(start_date='2021-01-01', end_date='2021-01-31', operator_name='LIME ROCK RESOURCES LP')
+    payload = ApiPayload(start_date='2021-01-01', end_date='2021-01-31', aggregate_by='operator', operator_name='LIME ROCK RESOURCES LP')
 
     result_df = client.ducs_by_operator(payload)
     print(result_df.count())
@@ -153,20 +153,20 @@ def main():
     #test_add_fips()
     #test_frac_crews()
     #test_rigs()
-    test_short_term_forecast()
+    #test_short_term_forecast()
     #test_short_term_forecast_history()
-    
+    test_ducs_by_operator()
     #compare_df()
 
 
 if __name__ == '__main__':
 
     # enable debug if required.
-    """
+    
     logging.basicConfig(level=logging.DEBUG)
 
-    access_token = ''
+    access_token = 'eyJwcm9qZWN0X2lkIjogIlN5bm1heCBjb21tZXJjaWFsIEFQSSIsICJwcml2YXRlX2tleSI6ICJTd2dHQVVWOEdMdFpibk03WTMzOWIzbnp6VmZYYkFiY09wODlBODN3cE5FIiwgImNsaWVudF9pZCI6ICJGZWxpeCBLZXkiLCAidHlwZSI6ICJvbmVfeWVhcl9saWNlbnNlZF9jdXN0b21lciIsICJzdGFydF9kYXRlIjogIjAzLzEzLzIwMjMiLCAiZW5kX2RhdGUiOiAiMDMvMTMvMjAyNCIsICJ0cmlhbF9saWNlbnNlIjogZmFsc2UsICJpc3N1ZV9kYXRldGltZSI6ICIxMy0wMy0yMDIzIDA3OjQ1OjMwIiwgImFkbWluX3VzZXIiOiBmYWxzZSwgInVzZXJfcm9sZXMiOiBbImh5cGVyaW9uIiwgInZ1bGNhbiJdfQ=='
     
     hyperion_client = HyperionApiClient(access_token=access_token)
-    """
+    
     main()

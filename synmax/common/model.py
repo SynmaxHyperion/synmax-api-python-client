@@ -12,8 +12,9 @@ class PayloadModelBase:
     region: str = None
     sub_region: str = None
     operator: str = None
-
-    # fetch_all = True
+    api: list = None
+    aggregate_by: str = None
+    forecast_run_date: str = None
 
     def payload(self, pagination_start=None):
         # just intercept the payload calls so they aren't relayed to `object`
