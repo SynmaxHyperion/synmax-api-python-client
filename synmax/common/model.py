@@ -7,7 +7,7 @@ class PayloadModelBase:
     start_date: str = None
     end_date: str = None
 
-    production_month: int = 0
+    production_month: int = None
     state_code: str = None
     region: str = None
     sub_region: str = None
