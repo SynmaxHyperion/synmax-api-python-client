@@ -30,9 +30,8 @@ class ApiPayload(PayloadModelBase):
             }
         }
 
-        for k, v in _payload.items():
-            if v is None:
-                _payload.pop(k, None)
+        if _payload["production_month"] == None: 
+             _payload.pop("production_month",  None)
             
         return json.dumps(_payload)
 
