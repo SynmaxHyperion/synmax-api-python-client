@@ -29,9 +29,10 @@ class ApiPayload(PayloadModelBase):
                 "start": pagination_start if pagination_start else self.pagination_start
             }
         }
-        
-        if _payload["production_month"] == None: 
-            _payload.pop("production_month")
+
+        for k, v in _payload.items():
+            if v is None:
+                _payload.pop(k, None)
             
         return json.dumps(_payload)
 
@@ -52,7 +53,7 @@ class HyperionApiClient(object):
         if local_server:
             self._base_uri = 'http://127.0.0.1:8080/'
         else:
-            self._base_uri = 'https://hyperion.api.synmax.com/' # v2 temp location is at: 'https://hyperion-api-v2-xzzxclvs3q-uc.a.run.app'
+            self._base_uri = 'https://hyperion.api.synmax.com/'
 
         if async_client:
             LOGGER.info('Initializing async client')
