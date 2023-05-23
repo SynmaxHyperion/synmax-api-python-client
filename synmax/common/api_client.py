@@ -28,7 +28,7 @@ class ApiClientBase:
     def __init__(self, access_token):
         self.access_key = access_token
         self.session = requests.Session()
-        self.session.verify = False
+        self.session.verify = True
         # update headers
         self.session.headers.update(self.headers)
 
@@ -238,7 +238,7 @@ class ApiClientAsync(ApiClientBase):
         async def fetch_from_api(page_number):
             async with semaphore:
                 _data = payload.payload(pagination_start=page_number * page_size)
-                async with session.post(url, data=_data, timeout=_api_timeout, verify_ssl=False) as async_resp:
+                async with session.post(url, data=_data, timeout=_api_timeout, verify_ssl=True) as async_resp:
                     async_resp.raise_for_status()
                     json_data = await async_resp.json()
                     if 'error' in json_data:
