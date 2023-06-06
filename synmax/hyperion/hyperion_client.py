@@ -13,17 +13,21 @@ LOGGER = logging.getLogger(__name__)
 @dataclass
 class ApiPayload(PayloadModelBase):
     def payload(self, pagination_start=None) -> str:
+
         _payload = {
-            "start_date": self.start_date,
-            "end_date": self.end_date,
-            "api": self.api,
+            "start_date": str(self.start_date),
+            "end_date": str(self.end_date),
+            "forecast_run_date": self.forecast_run_date,
+            "production_month": self.production_month,
             "state_code": self.state_code,
             "region": self.region,
             "sub_region": self.sub_region,
+            "county": self.county,
             "operator": self.operator,
-            "production_month": self.production_month,
+            "api": self.api,
             "aggregate_by": self.aggregate_by,
-            "forecast_run_date": self.forecast_run_date,
+            "service_company": self.service_company,
+            "nerc_id": self.nerc_id,
 
             "pagination": {
                 "start": pagination_start if pagination_start else self.pagination_start
