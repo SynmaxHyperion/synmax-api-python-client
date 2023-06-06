@@ -53,7 +53,7 @@ class HyperionApiClient(object):
         if local_server:
             self._base_uri = 'http://127.0.0.1:8080/'
         else:
-            self._base_uri = 'https://hyperion.api.synmax.com/'
+            self._base_uri = 'https://hyperion-api-v2-xzzxclvs3q-uc.a.run.app' #'https://hyperion.api.synmax.com/'
 
         if async_client:
             LOGGER.info('Initializing async client')
