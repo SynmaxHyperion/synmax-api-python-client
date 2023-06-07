@@ -11,11 +11,26 @@ LOGGER = logging.getLogger(__name__)
 
 class ApiPayload(PayloadModelBase):
     def payload(self, pagination_start=None) -> str:
+        
+        if self.start_date is None:
+            payload_start_date = None
+        else:
+            payload_start_date = str(self.start_date)
+
+        if self.end_date is None:
+            payload_end_date = None
+        else:
+            payload_end_date = str(self.end_date)
+
+        if self.forecast_run_date is None:
+            payload_forecast_run_date = None
+        else:
+            payload_forecast_run_date = str(self.forecast_run_date) 
 
         _payload = {
-            "start_date": str(self.start_date),
-            "end_date": str(self.end_date),
-            "forecast_run_date": self.forecast_run_date,
+            "start_date": payload_start_date,
+            "end_date": payload_end_date,
+            "forecast_run_date": payload_forecast_run_date,
             "production_month": self.production_month,
             "state_code": self.state_code,
             "region": self.region,
@@ -25,7 +40,7 @@ class ApiPayload(PayloadModelBase):
             "api": self.api,
             "aggregate_by": self.aggregate_by,
             "service_company": self.service_company,
-            "nerc_id": self.nerc_id,
+            #"nerc_id": self.nerc_id,
 
             "pagination": {
                 "start": pagination_start if pagination_start else self.pagination_start
@@ -53,7 +68,7 @@ class HyperionApiClient(object):
         if local_server:
             self._base_uri = 'http://127.0.0.1:8080/'
         else:
-            self._base_uri = 'https://hyperion-api-v2-xzzxclvs3q-uc.a.run.app' #'https://hyperion.api.synmax.com/'
+            self._base_uri = 'https://hyperion.api.synmax.com/'
 
         if async_client:
             LOGGER.info('Initializing async client')
@@ -87,10 +102,6 @@ class HyperionApiClient(object):
 
     def frac_crews(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/v3/fraccrews", payload=payload, return_json=True)
-
-#    def production_by_county_and_operator(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
-#        return self.api_client.post(f"{self._base_uri}/v3/productionbycountyandoperator", payload=payload,
-#                                    return_json=True)
 
     def production_by_well(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/v3/productionbywell", payload=payload, return_json=True)
