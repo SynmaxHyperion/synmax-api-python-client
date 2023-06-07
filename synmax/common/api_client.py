@@ -285,7 +285,6 @@ class ApiClientAsync(ApiClientBase):
                 return pandas.DataFrame()
 
             json_result = self._return_response(response, return_json)
-            print(json_result)
             pagination = json_result['pagination']
             total_count = pagination['total_count']
             total_pages = pagination['total_count'] // pagination['page_size']
