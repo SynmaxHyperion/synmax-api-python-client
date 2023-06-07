@@ -16,16 +16,34 @@ class ApiPayload(PayloadModelBase):
             payload_start_date = None
         else:
             payload_start_date = str(self.start_date)
-
         if self.end_date is None:
             payload_end_date = None
         else:
             payload_end_date = str(self.end_date)
-
         if self.forecast_run_date is None:
             payload_forecast_run_date = None
         else:
-            payload_forecast_run_date = str(self.forecast_run_date) 
+            payload_forecast_run_date = str(self.forecast_run_date)
+        if type(self.production_month) == int:
+            self.production_month = [self.production_month]
+        if type(self.state_code) == str:
+            self.state_code = [self.state_code]
+        if type(self.region) == str:
+            self.region = [self.region]
+        if type(self.sub_region) == str:
+            self.sub_region = [self.sub_region]
+        if type(self.county) == str:
+            self.county = [self.county]
+        if type(self.operator) == str:
+            self.operator = [self.operator]
+        if type(self.api) == int:
+            self.api = [self.api]
+        if type(self.aggregate_by) == str:
+            self.aggregate_by = [self.aggregate_by]
+        if type(self.service_company) == str:
+            self.service_company = [self.service_company]
+        #if type(self.nerc_id) == int:
+        #    self.nerc_id = [self.nerc_id]
 
         _payload = {
             "start_date": payload_start_date,

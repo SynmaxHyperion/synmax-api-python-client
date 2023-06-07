@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Union
 from datetime import date
 
 
@@ -8,16 +8,16 @@ class PayloadModelBase(BaseModel):
     start_date: Optional[date] = None
     end_date: Optional[date] = None
     forecast_run_date: Optional[date] = None
-    production_month: Optional[List[int]] = None
-    state_code: Optional[List[str]] = None
-    region: Optional[List[str]] = None
-    sub_region: Optional[List[str]] = None
-    county: Optional[List[str]] = None
-    operator: Optional[List[str]] = None
-    api: Optional[List[int]] = None
-    aggregate_by: Optional[List[str]] = None
-    service_company: Optional[List[str]] = None
-    nerc_id: Optional[List[str]] = None
+    production_month: Optional[Union[int, List[int]]] = None
+    state_code: Optional[Union[str, List[str]]] = None
+    region: Optional[Union[str, List[str]]] = None
+    sub_region: Optional[Union[str, List[str]]] = None
+    county: Optional[Union[str, List[str]]] = None
+    operator: Optional[Union[str, List[str]]] = None
+    api: Optional[Union[int, List[int]]] = None
+    aggregate_by: Optional[Union[str, List[str]]] = None
+    service_company: Optional[Union[str, List[str]]] = None
+    # nerc_id: Optional[Union[str, List[str]]] = None
 
     def payload(self, pagination_start=None):
         # just intercept the payload calls so they aren't relayed to `object`
