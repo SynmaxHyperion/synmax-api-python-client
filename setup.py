@@ -13,8 +13,14 @@ NAME = "synmax-api-python-client"
 # prerequisite: setuptools
 # http://pypi.python.org/pypi/setuptools
 
-REQUIRES = ["urllib3", "requests", ]
 # DEV_REQUIRES = ["pytest", "black"]
+
+from pip._internal.req import parse_requirements
+
+def load_requirements(file_name):
+    requirements = parse_requirements(file_name, session=False)
+    return [str(req.requirement) for req in requirements]
+
 
 DIR_PATH = dirname(abspath(__file__))
 
@@ -36,7 +42,7 @@ setup(
     url="https://github.com/SynMaxDev/synmax-api-python-client.git",
     author="Eric Anderson and Deepa Aswathaiah",
     author_email="",
-    install_requires=REQUIRES,
+    install_requires=load_requirements("requirements.txt"),
     # extras_require={"dev": DEV_REQUIRES},
     python_requires=">=3.7",
     include_package_data=True,
