@@ -9,7 +9,7 @@ from synmax.hyperion import HyperionApiClient, ApiPayload, add_daily, get_fips
 
 logging.basicConfig(level=logging.INFO)
 
-client = HyperionApiClient(local_server=False)
+client = HyperionApiClient(local_server=True, async_client=False)
 
 
 # Test - GET 

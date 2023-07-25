@@ -3,7 +3,6 @@ import os
 
 import pandas as pd
 
-from config import DATA_FOLDER
 from .hyperion_client import HyperionApiClient, ApiPayload
 
 
@@ -49,6 +48,7 @@ def get_fips():
     Returns lookup table for FIPS codes
     :return: Pandas dataframe
     """
+    from synmax.config import DATA_FOLDER
     return pd.read_csv(os.path.join(DATA_FOLDER, 'fips_lookup.csv'))
 
 
