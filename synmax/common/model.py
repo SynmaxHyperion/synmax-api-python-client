@@ -17,6 +17,9 @@ class PayloadModelBase(BaseModel):
     api: Optional[Union[int, List[int]]] = None
     aggregate_by: Optional[Union[str, List[str]]] = None
     service_company: Optional[Union[str, List[str]]] = None
+    frac_class: Optional[Union[str, List[str]]] = None
+    rig_class: Optional[Union[str, List[str]]] = None
+    completion_class: Optional[Union[str, List[str]]] = None
     # nerc_id: Optional[Union[str, List[str]]] = None
 
     def payload(self, pagination_start=None):

@@ -42,6 +42,12 @@ class ApiPayload(PayloadModelBase):
             self.aggregate_by = [self.aggregate_by]
         if type(self.service_company) == str:
             self.service_company = [self.service_company]
+        if type(self.rig_class) == str:
+            self.rig_class = [self.rig_class]
+        if type(self.completion_class) == str:
+            self.completion_class = [self.completion_class]
+        if type(self.frac_class) == str:
+            self.frac_class = [self.frac_class]
         #if type(self.nerc_id) == int:
         #    self.nerc_id = [self.nerc_id]
 
@@ -58,6 +64,9 @@ class ApiPayload(PayloadModelBase):
             "api": self.api,
             "aggregate_by": self.aggregate_by,
             "service_company": self.service_company,
+            "rig_class": self.rig_class,
+            "completion_class": self.completion_class,
+            "frac_class": self.frac_class,
             #"nerc_id": self.nerc_id,
 
             "pagination": {
