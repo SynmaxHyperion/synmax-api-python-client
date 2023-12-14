@@ -1,16 +1,13 @@
 import logging
 import multiprocessing
-
+import sys
 import pandas
 import pandas as pd
 from tqdm import tqdm
-
+sys.path.append('/Users/felix/Documents/GitHub/synmax-api-python-client/')
 from synmax.hyperion import HyperionApiClient, ApiPayload, add_daily, get_fips
 
 logging.basicConfig(level=logging.INFO)
-
-client = HyperionApiClient(local_server=True, async_client=False)
-
 
 # Test - GET 
 
@@ -70,7 +67,7 @@ def test_production_by_county_and_operator():
 
 
 def test_frac_crews():
-    payload = ApiPayload(start_date='2021-10-01', end_date='2021-12-31', state_code='CO', sub_region='Colorado wo SJ', region='west', operator='BILL BARRETT CORPORATION')
+    payload = ApiPayload(start_date='2022-01-01', end_date='2023-06-30')
 
     result_df = client.frac_crews(payload)
     print(result_df.count())
@@ -165,7 +162,6 @@ if __name__ == '__main__':
     
     #logging.basicConfig(level=logging.DEBUG)
 
-    access_token = ''    
-    hyperion_client = HyperionApiClient(access_token=access_token, local_server=False)
-    
+    access_token = 'eyJwcm9qZWN0X2lkIjogIlN5bm1heCBjb21tZXJjaWFsIEFQSSIsICJwcml2YXRlX2tleSI6ICJTd2dHQVVWOEdMdFpibk03WTMzOWIzbnp6VmZYYkFiY09wODlBODN3cE5FIiwgImNsaWVudF9pZCI6ICJGZWxpeCBLZXkiLCAidHlwZSI6ICJvbmVfeWVhcl9saWNlbnNlZF9jdXN0b21lciIsICJzdGFydF9kYXRlIjogIjAzLzEzLzIwMjMiLCAiZW5kX2RhdGUiOiAiMDMvMTMvMjAyNCIsICJ0cmlhbF9saWNlbnNlIjogZmFsc2UsICJpc3N1ZV9kYXRldGltZSI6ICIxMy0wMy0yMDIzIDA3OjQ1OjMwIiwgImFkbWluX3VzZXIiOiBmYWxzZSwgInVzZXJfcm9sZXMiOiBbImh5cGVyaW9uIiwgInZ1bGNhbiJdfQ=='    
+    client = HyperionApiClient(access_token=access_token, local_server=False, async_client=True)
     main()
