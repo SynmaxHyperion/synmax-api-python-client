@@ -9,9 +9,6 @@ from synmax.hyperion import HyperionApiClient, ApiPayload, add_daily, get_fips
 
 logging.basicConfig(level=logging.INFO)
 
-client = HyperionApiClient(local_server=True, async_client=False)
-
-
 # Test - GET 
 
 def fetch_region():
@@ -106,6 +103,13 @@ def test_short_term_forecast_history():
 
     payload = ApiPayload(start_date='2020-01-01')
     result_df = client.short_term_forecast(payload)
+    
+def test_pipeline_scrapes():
+    payload = ApiPayload(start_date='2024-01-01', end_date='2024-01-10')
+    print(client.__dir__())
+    result_df = client.pipeline_scrapes(payload)
+    print(result_df.count())
+    
 
 
 # TEST HELPERS
@@ -151,12 +155,13 @@ def main():
     #well_completion()
     #test_production_by_well()
     #test_add_fips()
-    test_frac_crews()
+    #test_frac_crews()
     #test_rigs()
     #test_short_term_forecast()
     #test_short_term_forecast_history()
     #test_ducs_by_operator()
     #compare_df()
+    test_pipeline_scrapes()
 
 
 if __name__ == '__main__':
@@ -165,7 +170,7 @@ if __name__ == '__main__':
     
     #logging.basicConfig(level=logging.DEBUG)
 
-    access_token = ''    
-    hyperion_client = HyperionApiClient(access_token=access_token, local_server=False)
-    
+    access_token = 'eyJwcm9qZWN0X2lkIjogIlN5bm1heCBjb21tZXJjaWFsIEFQSSIsICJwcml2YXRlX2tleSI6ICJTd2dHQVVWOEdMdFpibk03WTMzOWIzbnp6VmZYYkFiY09wODlBODN3cE5FIiwgImNsaWVudF9pZCI6ICJGZWxpeCBLZXkiLCAidHlwZSI6ICJvbmVfeWVhcl9saWNlbnNlZF9jdXN0b21lciIsICJzdGFydF9kYXRlIjogIjAzLzEzLzIwMjMiLCAiZW5kX2RhdGUiOiAiMDMvMTMvMjAyNCIsICJ0cmlhbF9saWNlbnNlIjogZmFsc2UsICJpc3N1ZV9kYXRldGltZSI6ICIxMy0wMy0yMDIzIDA3OjQ1OjMwIiwgImFkbWluX3VzZXIiOiBmYWxzZSwgInVzZXJfcm9sZXMiOiBbImh5cGVyaW9uIiwgInZ1bGNhbiJdfQ=='    
+    client = HyperionApiClient(access_token=access_token, local_server=True)
+    print(dir(client))
     main()
