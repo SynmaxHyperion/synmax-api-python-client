@@ -3,7 +3,7 @@ import os
 
 import pandas as pd
 
-from hyperion_client import HyperionApiClient, ApiPayload
+from .hyperion_client import HyperionApiClient, ApiPayload
 
 
 def monthly_to_daily(row, prod_column='gas_monthly', date_column='date'):
@@ -63,6 +63,6 @@ def make_fips():
     
     
 if __name__ == '__main__':
-    access_token = 'eyJwcm9qZWN0X2lkIjogIlN5bm1heCBjb21tZXJjaWFsIEFQSSIsICJwcml2YXRlX2tleSI6ICJTd2dHQVVWOEdMdFpibk03WTMzOWIzbnp6VmZYYkFiY09wODlBODN3cE5FIiwgImNsaWVudF9pZCI6ICJGZWxpeCBLZXkiLCAidHlwZSI6ICJvbmVfeWVhcl9saWNlbnNlZF9jdXN0b21lciIsICJzdGFydF9kYXRlIjogIjAzLzEzLzIwMjMiLCAiZW5kX2RhdGUiOiAiMDMvMTMvMjAyNCIsICJ0cmlhbF9saWNlbnNlIjogZmFsc2UsICJpc3N1ZV9kYXRldGltZSI6ICIxMy0wMy0yMDIzIDA3OjQ1OjMwIiwgImFkbWluX3VzZXIiOiBmYWxzZSwgInVzZXJfcm9sZXMiOiBbImh5cGVyaW9uIiwgInZ1bGNhbiJdfQ=='    
+    access_token = ''    
     client = HyperionApiClient(access_token=access_token, local_server=True)
     print(client.__dir__())

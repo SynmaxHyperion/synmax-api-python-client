@@ -4,6 +4,10 @@ import multiprocessing
 import pandas
 import pandas as pd
 from tqdm import tqdm
+import os 
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)))))
 
 from synmax.hyperion import HyperionApiClient, ApiPayload, add_daily, get_fips
 
@@ -170,7 +174,12 @@ if __name__ == '__main__':
     
     #logging.basicConfig(level=logging.DEBUG)
 
-    access_token = 'eyJwcm9qZWN0X2lkIjogIlN5bm1heCBjb21tZXJjaWFsIEFQSSIsICJwcml2YXRlX2tleSI6ICJTd2dHQVVWOEdMdFpibk03WTMzOWIzbnp6VmZYYkFiY09wODlBODN3cE5FIiwgImNsaWVudF9pZCI6ICJGZWxpeCBLZXkiLCAidHlwZSI6ICJvbmVfeWVhcl9saWNlbnNlZF9jdXN0b21lciIsICJzdGFydF9kYXRlIjogIjAzLzEzLzIwMjMiLCAiZW5kX2RhdGUiOiAiMDMvMTMvMjAyNCIsICJ0cmlhbF9saWNlbnNlIjogZmFsc2UsICJpc3N1ZV9kYXRldGltZSI6ICIxMy0wMy0yMDIzIDA3OjQ1OjMwIiwgImFkbWluX3VzZXIiOiBmYWxzZSwgInVzZXJfcm9sZXMiOiBbImh5cGVyaW9uIiwgInZ1bGNhbiJdfQ=='    
+    access_token = ''    
     client = HyperionApiClient(access_token=access_token, local_server=True)
+    
+    import synmax.hyperion as hyperion_api
+    print(hyperion_api.__file__)
+    
+    print(client.__le__)
     print(dir(client))
     main()
