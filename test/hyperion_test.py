@@ -114,7 +114,9 @@ def test_pipeline_scrapes():
     result_df = client.pipeline_scrapes(payload)
     print(result_df.count())
     
-
+def test_fetch_pipeline_scrape_status():
+    result_df = client.fetch_pipeline_scrape_status()
+    print(result_df.count())
 
 # TEST HELPERS
 
@@ -165,7 +167,8 @@ def main():
     #test_short_term_forecast_history()
     #test_ducs_by_operator()
     #compare_df()
-    test_pipeline_scrapes()
+    #test_pipeline_scrapes()
+    test_fetch_pipeline_scrape_status()
 
 
 if __name__ == '__main__':
