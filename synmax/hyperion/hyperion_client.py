@@ -47,7 +47,10 @@ class ApiPayload(PayloadModelBase):
         if type(self.completion_class) == str:
             self.completion_class = [self.completion_class]
         if type(self.frac_class) == str:
-            self.frac_class = [self.frac_class]
+            self.frac_class = [self.frac_class]    
+        if type(self.category) == str:
+            self.category = [self.category]
+        
         #if type(self.nerc_id) == int:
         #    self.nerc_id = [self.nerc_id]
 
@@ -67,6 +70,7 @@ class ApiPayload(PayloadModelBase):
             "rig_class": self.rig_class,
             "completion_class": self.completion_class,
             "frac_class": self.frac_class,
+            "category": self.category,
             #"nerc_id": self.nerc_id,
 
             "pagination": {
@@ -113,7 +117,9 @@ class HyperionApiClient(object):
     def fetch_operator_classification(self) -> pandas.DataFrame:
         return self.api_client_sync.get(f"{self._base_uri}/v3/operatorclassification", return_json=True)
     
-
+    def fetch_pipeline_scrape_status(self) -> pandas.DataFrame:
+        return self.api_client_sync.get(f"{self._base_uri}/v3/pipelinescrapestatus", return_json=True)
+    
     # POST
     def daily_fracked_feet(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/v3/dailyfrackedfeet", payload=payload, return_json=True)
@@ -147,3 +153,12 @@ class HyperionApiClient(object):
 
     def daily_production(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/v3/dailyproduction", payload=payload, return_json=True)
+    
+    def pipeline_scrapes(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
+        return self.api_client.post(f"{self._base_uri}/v3/pipelinescrapes", payload=payload, return_json=True)
+    
+    
+if __name__ == '__main__':
+    access_token = ''    
+    client = HyperionApiClient(access_token=access_token, local_server=True)
+    print(client.__dir__())

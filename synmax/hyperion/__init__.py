@@ -60,3 +60,9 @@ def make_fips():
     fips_df['county'] = fips_df.county.str.upper()
 
     fips_df.to_csv('fips_lookup.csv', index=False)
+    
+    
+if __name__ == '__main__':
+    access_token = ''    
+    client = HyperionApiClient(access_token=access_token, local_server=True)
+    print(client.__dir__())
