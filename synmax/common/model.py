@@ -10,6 +10,8 @@ class PayloadModelBase(BaseModel):
     forecast_run_date: Optional[date] = None
     production_month: Optional[Union[int, List[int]]] = None
     first_production_month: Optional[date] = None
+    first_production_month_start: Optional[date] = None
+    first_production_month_end: Optional[date] = None
     state_code: Optional[Union[str, List[str]]] = None
     region: Optional[Union[str, List[str]]] = None
     sub_region: Optional[Union[str, List[str]]] = None
