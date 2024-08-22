@@ -28,6 +28,14 @@ class ApiPayload(PayloadModelBase):
             payload_first_production_month = None
         else:
             payload_first_production_month = str(self.first_production_month)
+        if self.first_production_month_start is None:
+            payload_first_production_month_start = None
+        else:
+            payload_first_production_month_start = str(self.first_production_month_start)
+        if self.first_production_month_end is None:
+            payload_first_production_month_end = None
+        else:
+            payload_first_production_month_end = str(self.first_production_month_end)
         if type(self.production_month) == int:
             self.production_month = [self.production_month]
         if type(self.state_code) == str:
@@ -64,6 +72,8 @@ class ApiPayload(PayloadModelBase):
             "end_date": payload_end_date,
             "forecast_run_date": payload_forecast_run_date,
             "first_production_month": payload_first_production_month,
+            "first_production_month_start": payload_first_production_month_start,
+            "first_production_month_end": payload_first_production_month_end,
             "production_month": self.production_month,
             "state_code": self.state_code,
             "region": self.region,
@@ -77,7 +87,7 @@ class ApiPayload(PayloadModelBase):
             "completion_class": self.completion_class,
             "frac_class": self.frac_class,
             "category": self.category,
-            "modeled": self.modeled,
+            "modeled": str(self.modeled),
             "pagination": {
                 "start": pagination_start if pagination_start else self.pagination_start
             }
