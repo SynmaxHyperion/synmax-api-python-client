@@ -9,6 +9,7 @@ class PayloadModelBase(BaseModel):
     end_date: Optional[date] = None
     forecast_run_date: Optional[date] = None
     production_month: Optional[Union[int, List[int]]] = None
+    first_production_month: Optional[date] = None
     state_code: Optional[Union[str, List[str]]] = None
     region: Optional[Union[str, List[str]]] = None
     sub_region: Optional[Union[str, List[str]]] = None
@@ -21,6 +22,8 @@ class PayloadModelBase(BaseModel):
     rig_class: Optional[Union[str, List[str]]] = None
     completion_class: Optional[Union[str, List[str]]] = None
     category: Optional[Union[str, List[str]]] = None
+    modeled: Optional[bool] = None
+
     # nerc_id: Optional[Union[str, List[str]]] = None
 
     def payload(self, pagination_start=None):

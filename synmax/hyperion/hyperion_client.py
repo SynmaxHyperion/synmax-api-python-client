@@ -24,6 +24,10 @@ class ApiPayload(PayloadModelBase):
             payload_forecast_run_date = None
         else:
             payload_forecast_run_date = str(self.forecast_run_date)
+        if self.first_production_month is None:
+            payload_first_production_month = None
+        else:
+            payload_first_production_month = str(self.first_production_month)
         if type(self.production_month) == int:
             self.production_month = [self.production_month]
         if type(self.state_code) == str:
@@ -50,6 +54,7 @@ class ApiPayload(PayloadModelBase):
             self.frac_class = [self.frac_class]    
         if type(self.category) == str:
             self.category = [self.category]
+            
         
         #if type(self.nerc_id) == int:
         #    self.nerc_id = [self.nerc_id]
@@ -58,6 +63,7 @@ class ApiPayload(PayloadModelBase):
             "start_date": payload_start_date,
             "end_date": payload_end_date,
             "forecast_run_date": payload_forecast_run_date,
+            "first_production_month": payload_first_production_month,
             "production_month": self.production_month,
             "state_code": self.state_code,
             "region": self.region,
@@ -71,8 +77,7 @@ class ApiPayload(PayloadModelBase):
             "completion_class": self.completion_class,
             "frac_class": self.frac_class,
             "category": self.category,
-            #"nerc_id": self.nerc_id,
-
+            "modeled": self.modeled,
             "pagination": {
                 "start": pagination_start if pagination_start else self.pagination_start
             }
@@ -150,6 +155,9 @@ class HyperionApiClient(object):
 
     def short_term_forecast_history(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/v3/shorttermforecasthistory", payload=payload, return_json=True)
+    
+    def short_term_forecast_declines(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
+        return self.api_client.post(f"{self._base_uri}/v3/shorttermforecastdeclines", payload=payload, return_json=True)
 
     def daily_production(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/v3/dailyproduction", payload=payload, return_json=True)
