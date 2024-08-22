@@ -87,7 +87,7 @@ class ApiPayload(PayloadModelBase):
             "completion_class": self.completion_class,
             "frac_class": self.frac_class,
             "category": self.category,
-            "modeled": self.modeled,
+            "modeled": str(self.modeled),
             "pagination": {
                 "start": pagination_start if pagination_start else self.pagination_start
             }
