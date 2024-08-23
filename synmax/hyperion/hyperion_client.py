@@ -24,10 +24,6 @@ class ApiPayload(PayloadModelBase):
             payload_forecast_run_date = None
         else:
             payload_forecast_run_date = str(self.forecast_run_date)
-        if self.first_production_month is None:
-            payload_first_production_month = None
-        else:
-            payload_first_production_month = str(self.first_production_month)
         if self.first_production_month_start is None:
             payload_first_production_month_start = None
         else:
@@ -71,7 +67,6 @@ class ApiPayload(PayloadModelBase):
             "start_date": payload_start_date,
             "end_date": payload_end_date,
             "forecast_run_date": payload_forecast_run_date,
-            "first_production_month": payload_first_production_month,
             "first_production_month_start": payload_first_production_month_start,
             "first_production_month_end": payload_first_production_month_end,
             "production_month": self.production_month,
