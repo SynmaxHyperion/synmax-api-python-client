@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+from typing import Optional, List, Union
 
 import pandas
 
@@ -10,6 +11,10 @@ LOGGER = logging.getLogger(__name__)
 
 
 class ApiPayload(PayloadModelBase):
+    first_production_month_start: Optional[str] = None
+    first_production_month_end: Optional[str] = None
+    modeled: Optional[bool] = None
+
     def payload(self, pagination_start=None) -> str:
         
         if self.start_date is None:
@@ -58,7 +63,8 @@ class ApiPayload(PayloadModelBase):
             self.frac_class = [self.frac_class]    
         if type(self.category) == str:
             self.category = [self.category]
-            
+        if type(self.modeled) == bool:
+            self.modeled = str(self.modeled)
         
         #if type(self.nerc_id) == int:
         #    self.nerc_id = [self.nerc_id]
@@ -82,7 +88,7 @@ class ApiPayload(PayloadModelBase):
             "completion_class": self.completion_class,
             "frac_class": self.frac_class,
             "category": self.category,
-            "modeled": str(self.modeled),
+            "modeled": self.modeled,
             "pagination": {
                 "start": pagination_start if pagination_start else self.pagination_start
             }
@@ -90,6 +96,10 @@ class ApiPayload(PayloadModelBase):
         
         if _payload["production_month"] == None: 
             _payload.pop("production_month")
+            
+        if _payload["modeled"] == None:
+            _payload.pop("modeled")
+        
             
         return json.dumps(_payload)
 
@@ -172,6 +182,15 @@ class HyperionApiClient(object):
     
     
 if __name__ == '__main__':
-    access_token = ''    
-    client = HyperionApiClient(access_token=access_token, local_server=True)
-    print(client.__dir__())
+    #access_token = ''    
+    #client = HyperionApiClient(access_token=access_token, local_server=True)
+    #print(client.__dir__())
+    
+    #payload = ApiPayload(aggregate_by=["first_production_month"],
+    #                 start_date="2023-01-01", 
+    #                 end_date="2023-03-01", 
+    #                 first_production_month_start="1998-07-01",
+    #                 first_production_month_end="1999-02-01",
+    #)
+    
+    #print(payload.payload())

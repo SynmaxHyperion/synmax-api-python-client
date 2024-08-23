@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from typing import Optional, List, Union
 from datetime import date
 
-
 class PayloadModelBase(BaseModel):
     pagination_start: Optional[int] = 0
     start_date: Optional[date] = None
