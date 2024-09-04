@@ -2,14 +2,12 @@ from pydantic import BaseModel
 from typing import Optional, List, Union
 from datetime import date
 
-
 class PayloadModelBase(BaseModel):
     pagination_start: Optional[int] = 0
     start_date: Optional[date] = None
     end_date: Optional[date] = None
     forecast_run_date: Optional[date] = None
     production_month: Optional[Union[int, List[int]]] = None
-    first_production_month: Optional[date] = None
     first_production_month_start: Optional[date] = None
     first_production_month_end: Optional[date] = None
     state_code: Optional[Union[str, List[str]]] = None

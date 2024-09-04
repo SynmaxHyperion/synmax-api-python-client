@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+from typing import Optional, List, Union
 
 import pandas
 
@@ -10,6 +11,10 @@ LOGGER = logging.getLogger(__name__)
 
 
 class ApiPayload(PayloadModelBase):
+    first_production_month_start: Optional[str] = None
+    first_production_month_end: Optional[str] = None
+    modeled: Optional[bool] = None
+
     def payload(self, pagination_start=None) -> str:
         
         if self.start_date is None:
@@ -24,10 +29,6 @@ class ApiPayload(PayloadModelBase):
             payload_forecast_run_date = None
         else:
             payload_forecast_run_date = str(self.forecast_run_date)
-        if self.first_production_month is None:
-            payload_first_production_month = None
-        else:
-            payload_first_production_month = str(self.first_production_month)
         if self.first_production_month_start is None:
             payload_first_production_month_start = None
         else:
@@ -62,7 +63,8 @@ class ApiPayload(PayloadModelBase):
             self.frac_class = [self.frac_class]    
         if type(self.category) == str:
             self.category = [self.category]
-            
+        if type(self.modeled) == bool:
+            self.modeled = str(self.modeled)
         
         #if type(self.nerc_id) == int:
         #    self.nerc_id = [self.nerc_id]
@@ -71,7 +73,6 @@ class ApiPayload(PayloadModelBase):
             "start_date": payload_start_date,
             "end_date": payload_end_date,
             "forecast_run_date": payload_forecast_run_date,
-            "first_production_month": payload_first_production_month,
             "first_production_month_start": payload_first_production_month_start,
             "first_production_month_end": payload_first_production_month_end,
             "production_month": self.production_month,
@@ -87,7 +88,7 @@ class ApiPayload(PayloadModelBase):
             "completion_class": self.completion_class,
             "frac_class": self.frac_class,
             "category": self.category,
-            "modeled": str(self.modeled),
+            "modeled": self.modeled,
             "pagination": {
                 "start": pagination_start if pagination_start else self.pagination_start
             }
@@ -95,6 +96,10 @@ class ApiPayload(PayloadModelBase):
         
         if _payload["production_month"] == None: 
             _payload.pop("production_month")
+            
+        if _payload["modeled"] == None:
+            _payload.pop("modeled")
+        
             
         return json.dumps(_payload)
 
@@ -177,6 +182,16 @@ class HyperionApiClient(object):
     
     
 if __name__ == '__main__':
-    access_token = ''    
-    client = HyperionApiClient(access_token=access_token, local_server=True)
-    print(client.__dir__())
+    #access_token = ''    
+    #client = HyperionApiClient(access_token=access_token, local_server=True)
+    #print(client.__dir__())
+    
+    #payload = ApiPayload(aggregate_by=["first_production_month"],
+    #                 start_date="2023-01-01", 
+    #                 end_date="2023-03-01", 
+    #                 first_production_month_start="1998-07-01",
+    #                 first_production_month_end="1999-02-01",
+    #)
+    
+    #print(payload.payload())
+    pass
