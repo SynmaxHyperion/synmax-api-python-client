@@ -12,6 +12,7 @@ from aioretry import (
     RetryInfo
 )
 from requests.adapters import HTTPAdapter
+from tenacity import retry, wait_random_exponential, before_sleep_log, retry_if_exception_type
 from tqdm import tqdm
 from urllib3 import Retry
 
@@ -36,7 +37,7 @@ class ApiClientBase:
         retry_strategy = Retry(
             total=10,
             backoff_factor=2,
-            status_forcelist=[408, 429, 500, 502, 503, 504, 505],
+            status_forcelist=[408, 500, 502, 503, 504, 505],
             method_whitelist=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE"],
 
         )
@@ -78,6 +79,11 @@ class ApiClientBase:
 
 class ApiClient(ApiClientBase):
 
+    @retry(
+        wait=wait_random_exponential(multiplier=15, min=20, max=60),
+        before_sleep=before_sleep_log(LOGGER, logging.INFO),
+        retry=retry_if_exception_type(requests.exceptions.HTTPError)
+    )
     def get(self, url, params=None, return_json=False, **kwargs) -> pandas.DataFrame:
         r"""Sends a GET request.
 
@@ -92,6 +98,15 @@ class ApiClient(ApiClientBase):
         """
         LOGGER.info(url)
         response = self.session.get(url, params=params, timeout=_api_timeout, **kwargs)
+
+        if response.status_code == 429:
+            resp_headers = response.headers
+            LOGGER.warning(
+                'Too Many Requests, rate_limit_request_count: %s',
+                resp_headers.get('rate_limit_request_count')
+            )
+            raise requests.exceptions.HTTPError("Too Many Requests")
+
         json_result = self._return_response(response, return_json)
 
         if json_result:
@@ -99,6 +114,25 @@ class ApiClient(ApiClientBase):
             return df
 
         return None
+
+    @retry(
+        wait=wait_random_exponential(multiplier=15, min=20, max=60),
+        before_sleep=before_sleep_log(LOGGER, logging.INFO),
+        retry=retry_if_exception_type(requests.exceptions.HTTPError)
+    )
+    def _post_retry(self, url, data, timeout, **kwargs) -> requests.Response:
+
+        response = self.session.post(url, data=data, timeout=timeout, **kwargs)
+
+        if response.status_code == 429:
+            resp_headers = response.headers
+            LOGGER.warning(
+                'Too Many Requests, rate_limit_request_count: %s',
+                resp_headers.get('rate_limit_request_count')
+            )
+            raise requests.exceptions.HTTPError("Too Many Requests")
+
+        return response
 
     def post(self, url, payload: PayloadModelBase = None, return_json=False, **kwargs) -> pandas.DataFrame:
         r"""Sends a POST request.
@@ -122,7 +156,7 @@ class ApiClient(ApiClientBase):
             while not got_first_page or total_count >= pagination['start'] + pagination['page_size']:
                 try:
                     progress_bar.refresh()
-                    response = self.session.post(url, data=payload.payload(), timeout=_api_timeout, **kwargs)
+                    response = self._post_retry(url, data=payload.payload(), timeout=_api_timeout, **kwargs)
                     if response.status_code == 401:
                         progress_bar.update()
                         LOGGER.error(response.text)

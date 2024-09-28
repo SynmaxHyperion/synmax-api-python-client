@@ -7,3 +7,4 @@ aiohttp>=3.8.4
 aioretry>=5.0.2
 nest_asyncio>=1.5.6
 pydantic>=1.10.9
+tenacity~=9.0

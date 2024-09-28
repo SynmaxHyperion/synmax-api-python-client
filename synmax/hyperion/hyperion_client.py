@@ -1,7 +1,7 @@
 import json
 import logging
 import os
-from typing import Optional, List, Union
+from typing import Optional
 
 import pandas
 
@@ -16,7 +16,7 @@ class ApiPayload(PayloadModelBase):
     modeled: Optional[bool] = None
 
     def payload(self, pagination_start=None) -> str:
-        
+
         if self.start_date is None:
             payload_start_date = None
         else:
@@ -60,13 +60,13 @@ class ApiPayload(PayloadModelBase):
         if type(self.completion_class) == str:
             self.completion_class = [self.completion_class]
         if type(self.frac_class) == str:
-            self.frac_class = [self.frac_class]    
+            self.frac_class = [self.frac_class]
         if type(self.category) == str:
             self.category = [self.category]
         if type(self.modeled) == bool:
             self.modeled = str(self.modeled)
-        
-        #if type(self.nerc_id) == int:
+
+        # if type(self.nerc_id) == int:
         #    self.nerc_id = [self.nerc_id]
 
         _payload = {
@@ -93,14 +93,13 @@ class ApiPayload(PayloadModelBase):
                 "start": pagination_start if pagination_start else self.pagination_start
             }
         }
-        
-        if _payload["production_month"] == None: 
+
+        if _payload["production_month"] == None:
             _payload.pop("production_month")
-            
+
         if _payload["modeled"] == None:
             _payload.pop("modeled")
-        
-            
+
         return json.dumps(_payload)
 
 
@@ -121,6 +120,7 @@ class HyperionApiClient(object):
         else:
             self._base_uri = 'https://hyperion.api.synmax.com/'
 
+        async_client = False  # do not run in async to avoid http 429 throttle limit
         if async_client:
             LOGGER.info('Initializing async client')
             self.api_client = ApiClientAsync(access_token=access_token)
@@ -136,10 +136,10 @@ class HyperionApiClient(object):
 
     def fetch_operator_classification(self) -> pandas.DataFrame:
         return self.api_client_sync.get(f"{self._base_uri}/v3/operatorclassification", return_json=True)
-    
+
     def fetch_pipeline_scrape_status(self) -> pandas.DataFrame:
         return self.api_client_sync.get(f"{self._base_uri}/v3/pipelinescrapestatus", return_json=True)
-    
+
     # POST
     def daily_fracked_feet(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/v3/dailyfrackedfeet", payload=payload, return_json=True)
@@ -170,28 +170,12 @@ class HyperionApiClient(object):
 
     def short_term_forecast_history(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/v3/shorttermforecasthistory", payload=payload, return_json=True)
-    
+
     def short_term_forecast_declines(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/v3/shorttermforecastdeclines", payload=payload, return_json=True)
 
     def daily_production(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/v3/dailyproduction", payload=payload, return_json=True)
-    
+
     def pipeline_scrapes(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/v3/pipelinescrapes", payload=payload, return_json=True)
-    
-    
-if __name__ == '__main__':
-    #access_token = ''    
-    #client = HyperionApiClient(access_token=access_token, local_server=True)
-    #print(client.__dir__())
-    
-    #payload = ApiPayload(aggregate_by=["first_production_month"],
-    #                 start_date="2023-01-01", 
-    #                 end_date="2023-03-01", 
-    #                 first_production_month_start="1998-07-01",
-    #                 first_production_month_end="1999-02-01",
-    #)
-    
-    #print(payload.payload())
-    pass
