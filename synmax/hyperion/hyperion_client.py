@@ -133,6 +133,9 @@ class HyperionApiClient(object):
 
     def fetch_regions(self) -> pandas.DataFrame:
         return self.api_client_sync.get(f"{self._base_uri}/v3/regions", return_json=True)
+    
+    def fetch_dtils(self) -> pandas.DataFrame:
+        return self.api_client_sync.get(f"{self._base_uri}/v3/dtils", return_json=True)
 
     def fetch_operator_classification(self) -> pandas.DataFrame:
         return self.api_client_sync.get(f"{self._base_uri}/v3/operatorclassification", return_json=True)
