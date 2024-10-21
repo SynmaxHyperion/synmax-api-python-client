@@ -142,6 +142,12 @@ class HyperionApiClient(object):
 
     def fetch_pipeline_scrape_status(self) -> pandas.DataFrame:
         return self.api_client_sync.get(f"{self._base_uri}/v3/pipelinescrapestatus", return_json=True)
+    
+    def fetch_monitoring_tils(self) -> pandas.DataFrame:
+        return self.api_client_sync.get(f"{self._base_uri}/v3/til_monitoring", return_json=True)
+    
+    def fetch_forecast_run_dates(self) -> pandas.DataFrame:
+        return self.api_client_sync.get(f"{self._base_uri}/v3/shorttermforecasthistorydates", return_json=True)
 
     # POST
     def daily_fracked_feet(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
