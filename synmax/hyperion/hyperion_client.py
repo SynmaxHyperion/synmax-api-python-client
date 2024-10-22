@@ -2,11 +2,14 @@ import json
 import logging
 import os
 from typing import Optional
-
+import tqdm
 import pandas
 
 from synmax.common import ApiClient, ApiClientAsync, PayloadModelBase
-
+from synmax.helpers.implicit_filters import check_payload_has_sufficient_filters, \
+                                            fetch_implicit_filters, \
+                                            update_payload_with_implicit_filters, \
+                                            reverse_payload_to_user_input
 LOGGER = logging.getLogger(__name__)
 
 
@@ -175,7 +178,31 @@ class HyperionApiClient(object):
         return self.api_client.post(f"{self._base_uri}/v3/wells", payload=payload, return_json=True)
 
     def short_term_forecast(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
-        return self.api_client.post(f"{self._base_uri}/v3/shorttermforecast", payload=payload, return_json=True)
+        payload_has_suff_filters = check_payload_has_sufficient_filters()
+        if payload_has_suff_filters:
+            return self.api_client.post(f"{self._base_uri}/v3/shorttermforecast", payload=payload, return_json=True)
+        else:
+            implicit_filter_type = "sub_region"
+            implicit_filters_dict = fetch_implicit_filters(target_function="ShortTermForecast",
+                                                                filter_type=implicit_filter_type,
+                                                                access_key=self.access_key)
+
+            df_list = []
+            for filter_value in tqdm.tqdm(implicit_filters_dict[implicit_filter_type]):
+                payload = update_payload_with_implicit_filters(filter_value=filter_value,
+                                                                filter_type=implicit_filter_type,
+                                                                payload=payload)
+                
+                df_filter_value = self.api_client.post(f"{self._base_uri}/v3/shorttermforecast",
+                                            payload=payload,
+                                            return_json=True)
+                
+                df_list.append(df_filter_value)
+                
+                payload = reverse_payload_to_user_input(modified_filter_type=implicit_filter_type,
+                                            modified_payload=payload)
+            df_result_combined = pandas.concat(df_list)
+            return df_result_combined
 
     def short_term_forecast_history(self, payload: ApiPayload = ApiPayload()) -> pandas.DataFrame:
         return self.api_client.post(f"{self._base_uri}/v3/shorttermforecasthistory", payload=payload, return_json=True)
