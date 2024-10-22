@@ -1,18 +1,20 @@
 import requests
 from typing import Dict
 import json
-from synmax.common import ApiPayload
+import sys
+sys.path.append(".")
+from synmax.hyperion.hyperion_client import ApiPayload
 
 def check_payload_has_sufficient_filters(payload:ApiPayload=ApiPayload()) -> bool:
     """Checks if we need to add implicit filters to the payload for query performance
     
     returns has_sufficient_filters: bool """
-    
-    
     payload_json = json.loads(payload.payload())
     relevant_keys = ["sub_region", "county", "state_code", "region"]
     eval_list = [ payload_json.get(key) for key in relevant_keys]
-    if any(eval_list):
+    
+    # if aggregate by is present, this is a valid filter
+    if any(eval_list) or payload_json["aggregate_by"] and payload_json["aggregate_by"]:
         has_sufficient_filters = True
     else:
         has_sufficient_filters = False
@@ -48,13 +50,3 @@ def reverse_payload_to_user_input(modified_filter_type:str="sub_region", modifie
     payload_json = json.loads(modified_payload.payload())
     payload_json[modified_filter_type] = None
     return ApiPayload(**payload_json)
-
-
-if __name__ == "__main__":
-    access_token = "eyJwcm9qZWN0X2lkIjogIlN5bm1heCBjb21tZXJjaWFsIEFQSSIsICJwcml2YXRlX2tleSI6ICIwQndzX0ExMFpkdVQyaWlNLS1lbXh3Mk5BNUkxa09kdFNVai04RjVvNzU4IiwgImNsaWVudF9pZCI6ICJGZWxpeCBLZXkiLCAidHlwZSI6ICJvbmVfeWVhcl9saWNlbnNlZF9jdXN0b21lciIsICJzdGFydF9kYXRlIjogIjAzLzE5LzIwMjQiLCAiZW5kX2RhdGUiOiAiMDMvMTkvMjAyNSIsICJ0cmlhbF9saWNlbnNlIjogZmFsc2UsICJpc3N1ZV9kYXRldGltZSI6ICIxOS0wMy0yMDI0IDE0OjI0OjA4IiwgImFkbWluX3VzZXIiOiBmYWxzZSwgInVzZXJfcm9sZXMiOiBbImh5cGVyaW9uIiwgInZ1bGNhbiJdfQ=="
-    
-    resp = fetch_implicit_filters(target_function="ShortTermForecast",
-                     filter_type="sub_region",
-                     access_key=access_token)
-    
-    print(resp)

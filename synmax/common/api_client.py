@@ -17,7 +17,6 @@ from tqdm import tqdm
 from urllib3 import Retry
 
 from synmax.common.model import PayloadModelBase
-from synmax.helpers.implicit_filters import fetch_implicit_filters
 
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger(__name__)
