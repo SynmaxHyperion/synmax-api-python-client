@@ -28,7 +28,7 @@ class HyperionApiClient(object):
         if local_server:
             self._base_uri = 'http://127.0.0.1:8080/'
         else:
-            self._base_uri = 'https://hyperion.api.synmax.com/'
+            self._base_uri = 'https://hyperion-api-v2-1050800409605.us-central1.run.app' # 'https://hyperion.api.synmax.com/'
 
         async_client = False  # do not run in async to avoid http 429 throttle limit
         if async_client:
@@ -95,8 +95,11 @@ class HyperionApiClient(object):
                                                                 access_key=self.access_key)
 
             df_list = []
-            for filter_value in tqdm.tqdm(implicit_filters_dict[implicit_filter_type]):
-                payload = update_payload_with_implicit_filters(filter_value=filter_value,
+            implicit_filters = implicit_filters_dict[implicit_filter_type]
+            num_implicit_filters = len(implicit_filters)
+            for filter_idx in tqdm.tqdm(range(num_implicit_filters)):
+                print(f"Fetching data for partition {filter_idx + 1} out of {num_implicit_filters}.")
+                payload = update_payload_with_implicit_filters(filter_value=implicit_filters[filter_idx],
                                                                 filter_type=implicit_filter_type,
                                                                 payload=payload)
                 

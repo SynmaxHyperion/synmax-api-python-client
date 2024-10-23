@@ -14,9 +14,13 @@ from aioretry import (
 from requests.adapters import HTTPAdapter
 from tenacity import retry, wait_random_exponential, before_sleep_log, retry_if_exception_type
 from tqdm import tqdm
+import urllib3
 from urllib3 import Retry
 
 from synmax.common.model import PayloadModelBase
+
+# disable insecure https request warnings
+urllib3.disable_warnings()
 
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger(__name__)
